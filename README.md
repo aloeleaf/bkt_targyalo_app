@@ -1,0 +1,1 @@
+Targyalo foglalas applikacio.
