@@ -2,4 +2,4 @@ services:
   php:
     build:
       context: ..
-      dockerfile:  docker-compose/build/DockerFile-php
+      dockerfile:  docker-compose/build/Dockerfile-php

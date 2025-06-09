@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   php:
-    image: php:8.2-fpm
     volumes:
       - ../web:/var/www/html
       - ../php:/var/www/php
