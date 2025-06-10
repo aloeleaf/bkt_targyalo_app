@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   php:
+    image: aloeleaf/bkt-targyalo-php:latest
     volumes:
       - ../web:/var/www/html
       - ../php:/var/www/php
