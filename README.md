@@ -27,13 +27,3 @@ docker-compose up -d
 
 ### Alkalmazás elérése localhost-on
 https://localhost:8443/index.php
-
-
-### Git parancsok
-- változott fájlok, nem követett fájlok listája
-git status
-
-- minden változott és nem követett fájlok hozzzáadása
-git add .
-
-
