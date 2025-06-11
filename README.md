@@ -36,4 +36,8 @@ git status
 - minden változott és nem követett fájlok hozzzáadása
 git add .
 
+- git 
+git commit -m "pphMyAdmin hozzáadása a projecthez'
 
+- git feltöltés
+- git push
