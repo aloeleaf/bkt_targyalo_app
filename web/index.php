@@ -5,7 +5,11 @@
     <title>BKT Tárgyaló App</title>
 </head>
 <body>
-<h1>Welcome to the BKT Tárgyaló App</h1>
+<h1>Welcome to the BKT Tárgyaló App
+
+
+
+</h1>
 <p><a href="phpinfo.php">Rendszer információ</a></p>
 
 <?php
