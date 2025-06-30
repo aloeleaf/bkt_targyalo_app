@@ -1,26 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BKT Tárgyaló App</title>
-</head>
-<body>
-<h1>Welcome to the BKT Tárgyaló App
-
-
-
-</h1>
-<p><a href="phpinfo.php">Rendszer információ</a></p>
-
 <?php
-require '/var/www/php/helper.php';
-echo "Hello from web root!<br>";
-echo custom_function();
-echo "<br>Current time: " . get_current_time() . "<br>";
-echo "Server info: " . get_server_info() . "<br>";
-echo "This is the web root index.php file.<br>";
-echo connect_to_mariadb('db', 'dbappuser', 'p1ssw2rd', 'bktAppdb');
+
+require_once __DIR__ . '/app/Auth.php';
+$config = require_once __DIR__ . '/config/config.php';
+
+$auth = new Auth($config);
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $result = $auth->login($username, $password);
+
+    if ($result === true) {
+        header("Location: dashboard.php");
+        exit;
+    } else {
+        $error = $result;
+    }
+}
 ?>
 
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Bejelentkezés</title>
+</head>
+<body>
+    <h2>Bejelentkezés</h2>
+    <?php if (!empty($error)): ?>
+        <p style="color:red"><?= htmlspecialchars($error) ?></p>
+    <?php endif; ?>
+    <form method="post" action="">
+        <label>Felhasználónév: <input type="text" name="username" required></label><br>
+        <label>Jelszó: <input type="password" name="password" required></label><br>
+        <button type="submit">Belépés</button>
+    </form>
 </body>
 </html>
