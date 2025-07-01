@@ -1,13 +1,25 @@
 <?php
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 class Auth {
     private $config;
+    private $pdo;
 
     public function __construct($config) {
         $this->config = $config;
+        $this->pdo = new PDO(
+            "mysql:host={$config['db_host']};dbname={$config['db_name']};charset=utf8mb4",
+            $config['db_user'],
+            $config['db_pass']
+        );
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        date_default_timezone_set('Europe/Budapest');
     }
 
     public function login($username, $password) {
@@ -18,11 +30,12 @@ class Auth {
         ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
 
         if ($conn && @ldap_bind($conn, $ldap_user, $password)) {
+            // Bővített lekérdezés több attribútummal
             $search = ldap_search(
                 $conn,
                 $this->config['ldap_base_dn'],
                 "(sAMAccountName=$username)",
-                ['memberof']
+                ['memberof','displayName', 'givenName', 'sn']
             );
 
             if (!$search) {
@@ -31,9 +44,28 @@ class Auth {
 
             $entries = ldap_get_entries($conn, $search);
             if ($entries['count'] > 0 && isset($entries[0]['memberof'])) {
+                // Csoporttagság ellenőrzése
                 foreach ($entries[0]['memberof'] as $group) {
                     if (stripos($group, $this->config['ldap_group_dn']) !== false) {
+                        // displayName lekérdezése
+                        $displayName = $entries[0]['displayname'][0] ??
+                                       trim(($entries[0]['givenname'][0] ?? '') . ' ' . ($entries[0]['sn'][0] ?? ''));
+
+                        // Session-be mentés
                         $_SESSION['user'] = $username;
+                        $_SESSION['display_name'] = $displayName ?: $username;
+                        $_SESSION['login_time'] = date('Y-m-d H:i:s');
+
+                        // Írás az adatbázisba
+                        // helyesen, csak a név paraméterrel
+                        $stmt = $this->pdo->prepare(
+                            "INSERT INTO name (name, last_login) VALUES (:name, :last_login) ON DUPLICATE KEY UPDATE last_login = :last_login"
+                        );
+                        $stmt->execute([
+                            ':name' => $displayName,
+                            ':last_login' => $_SESSION['login_time']  // PHP időzónás idő
+                        ]);
+
                         return true;
                     }
                 }

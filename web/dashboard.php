@@ -6,6 +6,9 @@ if (!Auth::isAuthenticated()) {
     header("Location: index.php");
     exit;
 }
+$nev = $_SESSION['display_name'] ?? $_SESSION['user'];
+$loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
+echo date_default_timezone_get();
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +19,6 @@ if (!Auth::isAuthenticated()) {
     <title>Kezdőlap</title>
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/main.css" rel="stylesheet" />
-    
 </head>
 <body class="no-flex">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -30,7 +32,10 @@ if (!Auth::isAuthenticated()) {
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <span class="nav-link text-white">Üdvözlünk <?= htmlspecialchars($_SESSION['user']) ?>!</span>
+                        <span class="nav-link text-white">Üdvözlünk <?= htmlspecialchars($nev) ?>!</span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link text-white">Belépés ideje: <?= htmlspecialchars($loginIdo) ?></span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn btn-outline-light btn-sm ms-2" href="logout.php">Kijelentkezés</a>
