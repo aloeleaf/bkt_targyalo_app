@@ -28,6 +28,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(html => {
                     contentArea.innerHTML = html;
+
+                    // Ha settings.php-t töltünk be, akkor hívjuk meg a reloadAllLists() függvényt
+                    if (page === 'settings.php' && typeof reloadAllLists === 'function') {
+                        reloadAllLists();
+                    }
                 })
                 .catch(error => {
                     contentArea.innerHTML = `<div class="alert alert-danger">Hiba történt: ${error.message}</div>`;
