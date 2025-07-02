@@ -12,7 +12,7 @@ function addItem(type) {
   .then(data => {
     if (data.success) {
       input.value = '';
-      loadList(type);
+      reloadAllLists();
     }
   });
 }
@@ -26,7 +26,7 @@ function deleteItem(id, type) {
   .then(res => res.json())
   .then(data => {
     if (data.success) {
-      loadList(type);
+      reloadAllLists();
     }
   });
 }
@@ -49,6 +49,13 @@ function loadList(type) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function reloadAllLists() {
   ['birosag', 'tanacs', 'room', 'resztvevok'].forEach(type => loadList(type));
-});
+};
+
+console.log('Script betöltődött');
+
+//document.addEventListener('DOMContentLoaded', () => {
+//  console.log('DOM kész, reloadAllLists hívás');
+//  reloadAllLists();
+//});
