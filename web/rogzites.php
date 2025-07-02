@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 // Betöltjük a configot és a Database osztályt
 $config = require __DIR__ . '/config/config.php';
@@ -26,6 +27,13 @@ $persons = getDropdownItems($pdo, 'resztvevok');
         <div class="card p-4">
             <h3 class="card-title mb-3">Tárgyalási Jegyzék fejléce  </h3>
             <form action="/app/process_entry.php" method="POST">
+=======
+<h1 class="mb-4 text-center">Tárgyalási Jegyzék Rögzítése</h1>
+
+        <div class="card p-4">
+            <h3 class="card-title mb-3 ">Tárgyalási Jegyzék fejléce  </h3>
+            <form action="process_entry.php" method="POST">
+>>>>>>> 32698df825a9467cdbf3b9c5e97887cbefb35f95
 
                 <div class="row g-2 mb-4">
                     <div class="col-md-6">
