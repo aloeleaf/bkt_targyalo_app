@@ -2,15 +2,6 @@
 session_start();
 require_once __DIR__ . '/app/Auth.php';
 
-if (in_array('BKT_WebLoginGroup', $_SESSION['groups'])) {
-    echo '<p>BKT_WebLoginGroup csoport tag vagy!</p>';
-}
-
-if (in_array('BKT_WebLoginGroupAdmin', $_SESSION['groups'])) {
-    echo '<a href="/admin">Admin felület</a>';
-}
-
-
 if (!Auth::isAuthenticated()) {
     header("Location: index.php");
     exit;
@@ -35,7 +26,18 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <?php
+            if (in_array('BKT_WebLoginGroup', $_SESSION['groups'])) {
+                echo '<li class="nav-item">
+                        <a class="nav-link load-page" href="#" data-page="list.php"><i class="fa-solid fa-people-roof"></i> Tárgyalási jegyzékek</a>
+                    </li>
                     <li class="nav-item">
+                        <a class="nav-link load-page" href="#" data-page="rogzites.php"><i class="fa-solid fa-list-check"></i> Rögzítés</a>
+                    </li>';
+            }
+
+            if (in_array('BKT_WebLoginGroupAdmin', $_SESSION['groups'])) {
+                echo '<li class="nav-item">
                         <a class="nav-link load-page" href="#" data-page="list.php"><i class="fa-solid fa-people-roof"></i> Tárgyalási jegyzékek</a>
                     </li>
                     <li class="nav-item">
@@ -43,7 +45,9 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
                     </li>
                     <li class="nav-item">
                         <a class="nav-link load-page" href="#" data-page="settings.php"><i class="fa-solid fa-screwdriver-wrench"></i> Beállítások</a>
-                    </li>
+                    </li>';
+            }
+            ?>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -62,11 +66,10 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
 
     <div id="content-area" class="container">
         
-    
-    
     Itt lesz a lista.
     </div>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/settings.js"></script>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
