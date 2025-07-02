@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label class="form-label">Jelszó</label>
             <input type="password" class="form-control" name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Belépés</button>
+        <button type="submit" class="btn w-100 btn-brown">Belépés</button>
     </form>
     </div>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
