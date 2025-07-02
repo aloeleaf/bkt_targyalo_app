@@ -22,7 +22,7 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
     <link href="assets/fontawesome/css/all.css" rel="stylesheet" />
 </head>
 <body class="no-flex">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">

@@ -1,7 +1,7 @@
-<h1 class="mb-4">Tárgyalási Jegyzék Rögzítése</h1>
+<h1 class="mb-4 text-center">Tárgyalási Jegyzék Rögzítése</h1>
 
         <div class="card p-4">
-            <h3 class="card-title mb-3">Tárgyalási Jegyzék fejléce  </h3>
+            <h3 class="card-title mb-3 ">Tárgyalási Jegyzék fejléce  </h3>
             <form action="process_entry.php" method="POST">
 
                 <div class="row g-2 mb-4">

@@ -82,41 +82,11 @@ usort($filtered_jegyzokonyvek, function($a, $b) {
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
-    <style>
-        .jegyzokonyv-table {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .jegyzokonyv-table th {
-            width: 150px; 
-            text-align: right;
-            padding-right: 15px;
-            vertical-align: top; 
-        }
-        .jegyzokonyv-table td {
-            vertical-align: top; 
-        }
-        .jegyzokonyv-card {
-            margin-bottom: 40px; 
-            border: 5px solid #dee2e6; 
-            border-radius: 0.375rem; 
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
-        }
-        .jegyzokonyv-card .card-header {
-            background-color: #f8f9fa; 
-            border-bottom: 1px solid #dee2e6;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 0;
-            font-weight: bold;
-        }
-        .jegyzokonyv-card .card-body {
-            padding: 1.25rem;
-        }
-    </style>
-</head>
+    </head>
+    
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4 text-center">Tárgyalási Jegyzékek Listája </h1>
+        <h1 class="mb-4 text-center mt-custom-top-margin">Tárgyalási Jegyzékek Listája </h1>
 
         <?php if (empty($filtered_jegyzokonyvek)): ?>
             <div class="alert alert-info" role="alert">
@@ -125,7 +95,7 @@ usort($filtered_jegyzokonyvek, function($a, $b) {
         <?php else: ?>
             <?php foreach ($filtered_jegyzokonyvek as $data): ?>
                 <div class="card jegyzokonyv-card">
-                    <div class="card-header">
+                    <div class="card-header" style="padding-left: 385px;">
                         Tárgyalási Jegyzék - <?php echo htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?> (<?php echo htmlspecialchars($data['session_date'] ?? 'N/A'); ?>)
                     </div>
                     <div class="card-body">
