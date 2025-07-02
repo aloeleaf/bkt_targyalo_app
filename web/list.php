@@ -1,76 +1,32 @@
 <?php
-$all_jegyzokonyvek = [
-    [
-        'id' => 1,
-        'court_name' => 'Fővárosi Törvényszék',
-        'council_name' => '1. Számú Tanács',
-        'session_date' => '2025-06-28', 
-        'room_number' => '5-ös Tárgyaló',
-        'sorszam' => '1',
-        'ido' => '09:30',
-        'ugyszam' => 'P.2024/1234',
-        'persons' => 'Dr. Kovács Béla (bíró), Szabó Éva (ügyvéd)',
-        'azon' => '123456',
-        'ugyminoseg' => 'Kereskedelmi jogvita',
-        'intezkedes' => 'Következő tárgyalás kijelölése.'
-    ],
-    [
-        'id' => 2,
-        'court_name' => 'Pesti Központi Kerületi Bíróság',
-        'council_name' => '2. Számú Tanács',
-        'session_date' => '2025-06-20', 
-        'room_number' => '2B',
-        'sorszam' => '2',
-        'ido' => '10:00',
-        'ugyszam' => 'B.2025/567',
-        'persons' => 'Dr. Nagy Anna (bíró), Kiss Gergő (vádlott)',
-        'azon' => '789012',
-        'ugyminoseg' => 'Büntető ügy: lopás',
-        'intezkedes' => 'Bizonyítási eljárás lezárva.'
-    ],
-    [
-        'id' => 3,
-        'court_name' => 'Fővárosi Ítélőtábla',
-        'council_name' => 'C. Tanács',
-        'session_date' => '2025-06-05', 
-        'room_number' => '12-es terem',
-        'sorszam' => '3',
-        'ido' => '11:15',
-        'ugyszam' => 'F.2023/890',
-        'persons' => 'Dr. Tóth Csaba (bíró), Molnár Vera (felperes képv.)',
-        'azon' => '345678',
-        'ugyminoseg' => 'Fellebbezési ügy',
-        'intezkedes' => 'Ítélet kihirdetésének időpontja: 2025.07.10.'
-    ],
-    [
-        'id' => 4,
-        'court_name' => 'Szolnoki Törvényszék',
-        'council_name' => 'A. Tanács',
-        'session_date' => '2025-05-15', 
-        'room_number' => '1-es Tárgyaló',
-        'sorszam' => '4',
-        'ido' => '14:00',
-        'ugyszam' => 'K.2022/321',
-        'persons' => 'Dr. Varga Zoltán (bíró), Pap Géza (tanú)',
-        'azon' => '901234',
-        'ugyminoseg' => 'Környezetvédelmi per',
-        'intezkedes' => 'Szakértői vélemény bekérése.'
-    ]
-];
-$filtered_jegyzokonyvek = [];
-$four_weeks_ago = date('Y-m-d', strtotime('-4 weeks')); 
+// Betöltjük a configot és a Database osztályt
+$config = require __DIR__ . '/config/config.php';
+require_once __DIR__ . '/app/Database.php';
 
-foreach ($all_jegyzokonyvek as $jegyzokonyv) {
-    if ($jegyzokonyv['session_date'] >= $four_weeks_ago) {
-        $filtered_jegyzokonyvek[] = $jegyzokonyv;
-    }
-}
+$db = new Database($config);
+$pdo = $db->getPdo();
 
-usort($filtered_jegyzokonyvek, function($a, $b) {
-    return strtotime($b['session_date']) - strtotime($a['session_date']);
-});
+// Adatok lekérése az elmúlt 4 hétből (ha szükséges szűrés)
+$stmt = $pdo->prepare("SELECT * FROM rooms WHERE date >= CURDATE() - INTERVAL 28 DAY ORDER BY date DESC, time ASC");
+$stmt->execute();
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
+// Átalakítjuk a mezőket a megjelenítéshez
+$filtered_jegyzokonyvek = array_map(function ($row) {
+    return [
+        'court_name'     => $row['birosag'] ?? '',
+        'council_name'   => $row['tanacs'] ?? '',
+        'session_date'   => $row['date'] ?? '',
+        'room_number'    => $row['rooms'] ?? '',
+        'sorszam'        => $row['sorszam'] ?? '',
+        'ido'            => $row['time'] ?? '',
+        'ugyszam'        => $row['ugyszam'] ?? '',
+        'persons'        => $row['resztvevok'] ?? '',
+        'azon'           => $row['id'] ?? '', // ha van ilyen oszlopod
+        'ugyminoseg'     => explode("\n", $row['subject'])[0] ?? '',
+        'intezkedes'     => explode("\n", $row['subject'])[1] ?? '',
+    ];
+}, $rows);
 ?>
 
 <!DOCTYPE html>
@@ -141,7 +97,7 @@ usort($filtered_jegyzokonyvek, function($a, $b) {
                                 </tr>
                                 <tr>
                                     <th scope="row">Dátum:</th>
-                                    <td><?php echo htmlspecialchars($data['session_date'] ?? 'N/A'); ?></td>
+                                    <td><?php echo htmlspecialchars($data['date'] ?? 'N/A'); ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Tárgyaló:</th>
@@ -165,7 +121,7 @@ usort($filtered_jegyzokonyvek, function($a, $b) {
                                 </tr>
                                 <tr>
                                     <th scope="row">Id.:</th>
-                                    <td><?php echo htmlspecialchars($data['azon'] ?? 'N/A'); ?></td>
+                                    <td><?php echo htmlspecialchars($data['letszam'] ?? 'N/A'); ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Ügyminőség:</th>

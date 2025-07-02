@@ -64,10 +64,8 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
         </div>
     </nav>
 
-    <div id="content-area" class="container">
-        
-    Itt lesz a lista.
-    </div>
+    <div id="content-area" class="container"></div>
+    
     <script src="assets/js/main.js"></script>
     <script src="assets/js/settings.js"></script>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>

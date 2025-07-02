@@ -1,8 +1,31 @@
+<?php
+// Betöltjük a configot és a Database osztályt
+$config = require __DIR__ . '/config/config.php';
+require_once __DIR__ . '/app/Database.php';
+
+// Létrehozzuk az adatbázis kapcsolatot a már meglévő Database osztállyal
+$db = new Database($config);
+$pdo = $db->getPdo();  // Ez adja a PDO objektumot
+
+// Lekérdezzük az adott kategóriákhoz tartozó értékeket
+function getDropdownItems(PDO $pdo, string $category): array {
+    $stmt = $pdo->prepare("SELECT value FROM settings WHERE category = :category AND active = 1 ORDER BY value ASC");
+    $stmt->execute(['category' => $category]);
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+$courts = getDropdownItems($pdo, 'birosag');
+$councils = getDropdownItems($pdo, 'tanacs');
+$rooms = getDropdownItems($pdo, 'room');
+$persons = getDropdownItems($pdo, 'resztvevok'); 
+
+?>
+
 <h1 class="mb-4">Tárgyalási Jegyzék Rögzítése</h1>
 
         <div class="card p-4">
             <h3 class="card-title mb-3">Tárgyalási Jegyzék fejléce  </h3>
-            <form action="process_entry.php" method="POST">
+            <form action="/app/process_entry.php" method="POST">
 
                 <div class="row g-2 mb-4">
                     <div class="col-md-6">
@@ -28,8 +51,8 @@
 
                 <div class="row g-2 mb-4">
                     <div class="col-md-6">
-                        <label for="session_date" class="form-label">Dátum</label>
-                        <input type="date" class="form-control form-control-sm" id="session_date" name="session_date" required>
+                        <label for="date" class="form-label">Dátum</label>
+                        <input type="date" class="form-control form-control-sm" id="date" name="date" required>
                     </div>
                     <div class="col-md-6">
                         <label for="room_number" class="form-label">Tárgyaló</label>
@@ -61,8 +84,8 @@
                     </div>
                     <div class="row g-2 mb-4">
                     <div class="col-md-6">
-                        <label for="court_name" class="form-label">Résztvevők</label>
-                        <select class="form-select form-select-sm" id="court_name" name="court_name" required>
+                        <label for="resztvevok" class="form-label">Résztvevők</label>
+                        <select class="form-select form-select-sm" id="resztvevok" name="resztvevok" required>
                             <option value="">Válasszon...</option>
                             <?php foreach ($persons as $persons): ?>
                                 <option value="<?php echo htmlspecialchars($persons); ?>"><?php echo htmlspecialchars($persons); ?></option>
@@ -70,8 +93,8 @@
                             </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="azon" class="form-label">Id.</label>
-                        <input type="text" class="form-control form-control-sm" id="azon" name="azon" placeholder="Id. (pl. 215)">
+                        <label for="letszam" class="form-label">Id.</label>
+                        <input type="text" class="form-control form-control-sm" id="letszam" name="letszam" placeholder="Id. (pl. 215)">
                     </div>
                 </div>
 
