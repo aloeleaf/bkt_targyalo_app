@@ -44,33 +44,47 @@ class Auth {
 
             $entries = ldap_get_entries($conn, $search);
             if ($entries['count'] > 0 && isset($entries[0]['memberof'])) {
-                // Csoporttagság ellenőrzése
-                foreach ($entries[0]['memberof'] as $group) {
-                    if (stripos($group, $this->config['ldap_group_dn']) !== false) {
-                        // displayName lekérdezése
-                        $displayName = $entries[0]['displayname'][0] ??
-                                       trim(($entries[0]['givenname'][0] ?? '') . ' ' . ($entries[0]['sn'][0] ?? ''));
+    $userGroups = [];
 
-                        // Session-be mentés
-                        $_SESSION['user'] = $username;
-                        $_SESSION['display_name'] = $displayName ?: $username;
-                        $_SESSION['login_time'] = date('Y-m-d H:i:s');
-
-                        // Írás az adatbázisba
-                        // helyesen, csak a név paraméterrel
-                        $stmt = $this->pdo->prepare(
-                            "INSERT INTO name (name, last_login) VALUES (:name, :last_login) ON DUPLICATE KEY UPDATE last_login = :last_login"
-                        );
-                        $stmt->execute([
-                            ':name' => $displayName,
-                            ':last_login' => $_SESSION['login_time']  // PHP időzónás idő
-                        ]);
-
-                        return true;
-                    }
-                }
-                return "Nincs jogosultságod a weboldalhoz.";
+        foreach ($entries[0]['memberof'] as $groupDn) {
+            if (!is_string($groupDn)) continue;
+            if (preg_match('/CN=([^,]+)/i', $groupDn, $matches)) {
+                $userGroups[] = $matches[1];
             }
+        }
+
+        // Ellenőrzés: van-e legalább egy jogosult csoport
+        $hasPermission = false;
+        foreach ($this->config['ldap_required_groups'] as $requiredGroup) {
+            if (in_array($requiredGroup, $userGroups)) {
+                $hasPermission = true;
+                break;
+            }
+        }
+
+        if ($hasPermission) {
+            $displayName = $entries[0]['displayname'][0] ??
+                trim(($entries[0]['givenname'][0] ?? '') . ' ' . ($entries[0]['sn'][0] ?? ''));
+
+            $_SESSION['user'] = $username;
+            $_SESSION['display_name'] = $displayName ?: $username;
+            $_SESSION['login_time'] = date('Y-m-d H:i:s');
+            $_SESSION['groups'] = $userGroups;
+
+            $stmt = $this->pdo->prepare(
+                "INSERT INTO name (name, last_login) VALUES (:name, :last_login) ON DUPLICATE KEY UPDATE last_login = :last_login"
+            );
+            $stmt->execute([
+                ':name' => $displayName,
+                ':last_login' => $_SESSION['login_time']
+            ]);
+
+            return true;
+        }
+
+            return "Nincs jogosultságod a weboldalhoz.";
+        }
+
             return "Nem található felhasználó az LDAP-ban.";
         }
 
