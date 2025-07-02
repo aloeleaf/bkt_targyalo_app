@@ -2,6 +2,15 @@
 session_start();
 require_once __DIR__ . '/app/Auth.php';
 
+if (in_array('BKT_WebLoginGroup', $_SESSION['groups'])) {
+    echo '<p>BKT_WebLoginGroup csoport tag vagy!</p>';
+}
+
+if (in_array('BKT_WebLoginGroupAdmin', $_SESSION['groups'])) {
+    echo '<a href="/admin">Admin felület</a>';
+}
+
+
 if (!Auth::isAuthenticated()) {
     header("Location: index.php");
     exit;
@@ -53,6 +62,9 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
 
     <div id="content-area" class="container">
         
+    
+    
+    Itt lesz a lista.
     </div>
     <script src="assets/js/main.js"></script>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
