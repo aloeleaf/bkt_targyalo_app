@@ -12,3 +12,8 @@
 <input id="roomInput" placeholder="Új tárgyaló neve">
 <button onclick="addItem('room')">+</button>
 <ul id="roomList"></ul>
+
+<h2>Résztvevők hozzáadása</h2>
+<input id="resztvevokInput" placeholder="Új részvevők">
+<button onclick="addItem('resztvevok')">+</button>
+<ul id="resztvevokList"></ul>

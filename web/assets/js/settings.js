@@ -50,5 +50,5 @@ function loadList(type) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  ['birosag', 'tanacs', 'room'].forEach(type => loadList(type));
+  ['birosag', 'tanacs', 'room', 'resztvevok'].forEach(type => loadList(type));
 });
