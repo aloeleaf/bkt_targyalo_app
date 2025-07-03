@@ -66,6 +66,62 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
 
     <div id="content-area" class="container"></div>
     
+    <!-- Modal: ezt tedd a dashboard.php aljára -->
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="resultModalLabel">Rögzített adatok</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+        </div>
+        <div class="modal-body" id="resultContent">
+            <!-- Ide töltjük be az adatokat -->
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('submit', function (e) {
+                const form = e.target;
+                if (form && form.id === 'jegyzekForm') {
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+
+                    fetch('/app/process_entry.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        let html = '<table class="table table-bordered">';
+                        for (const [key, value] of Object.entries(data)) {
+                            html += `<tr><th>${key}</th><td>${value}</td></tr>`;
+                        }
+                        html += '</table>';
+
+                        document.getElementById('resultContent').innerHTML = html;
+
+                        const modalEl = document.getElementById('resultModal'); // EZ a helyes név
+                        const resultModal = new bootstrap.Modal(modalEl);
+
+                        // Eseményfigyelő a modal bezárására
+                        modalEl.addEventListener('hidden.bs.modal', function () {
+                            window.location.href = 'dashboard.php';
+                        }, { once: true });
+
+                        resultModal.show();
+                    })
+                    .catch(error => {
+                        alert('Hiba történt: ' + error);
+                    });
+                }
+            });
+        });
+    </script>
+
     <script src="assets/js/main.js"></script>
     <script src="assets/js/settings.js"></script>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>

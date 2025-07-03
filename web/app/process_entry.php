@@ -24,16 +24,18 @@ $intezkedes = $_POST['intezkedes'] ?? '';
 $subject = trim($ugyminoseg . "\n" . $intezkedes);
 
 // Ha szeretnél, beállíthatsz alapértelmezett értéket a letszamhoz
-$letszam = 0; // vagy pl. számold meg a résztvevők számát, ha van ilyen mező a formban
+//$letszam = 0; // vagy pl. számold meg a résztvevők számát, ha van ilyen mező a formban
 
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
+//echo '<pre>';
+//print_r($_POST);
+//echo '</pre>';
 
 // Egyszerű validáció
 if (!$birosag || !$tanacs || !$date || !$time || !$room) {
     die('Hiányzó kötelező mező(k).');
 }
+
+header('Content-Type: application/json');
 
 try {
     $stmt = $pdo->prepare("INSERT INTO rooms (birosag, tanacs, date, time, rooms, ugyszam, subject, letszam, resztvevok)
@@ -49,7 +51,9 @@ try {
         ':letszam' => $letszam,
         ':resztvevok' => $resztvevok,
     ]);
-    echo "Sikeres rögzítés!";
+    
+    echo json_encode(['success' => true, 'message' => 'Sikeres rögzítés']);
 } catch (PDOException $e) {
-    echo "Hiba az adatbázis művelet közben: " . $e->getMessage();
+    echo json_encode(['success' => false, 'message' => 'Hiba: ' . $e->getMessage()]);
 }
+
