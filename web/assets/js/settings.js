@@ -57,7 +57,7 @@ function reloadAllLists() {
   ['birosag', 'tanacs', 'room', 'resztvevok'].forEach(type => loadList(type));
 };
 
-console.log('Script betöltődött');
+//console.log('Script betöltődött');
 
 //document.addEventListener('DOMContentLoaded', () => {
 //  console.log('DOM kész, reloadAllLists hívás');
