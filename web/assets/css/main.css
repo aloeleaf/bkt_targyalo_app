@@ -126,6 +126,7 @@ body.no-flex {
     background-color: rgba(0,0,0,.08); 
     padding: 20px;
     border-radius: 8px;
+    border: 2px solid #8B2323;
     box-shadow: 0 2px 4px rgba(0,0,0,.05);
 }
 
