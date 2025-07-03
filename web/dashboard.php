@@ -109,17 +109,17 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
                 }
             });
 
-            fetch('list.php')
-            .then(res => res.text())
-            .then(html => {
-                const container = document.getElementById('content-area');
-                container.innerHTML = html;
+            //fetch('list.php')
+            //.then(res => res.text())
+            //.then(html => {
+            //    const container = document.getElementById('content-area');
+            //    container.innerHTML = html;
 
-                initSearch();
-            })
-            .catch(err => {
-                console.error('Hiba történt a list.php betöltésekor:', err);
-            });
+            //    initSearch();
+            //})
+            //.catch(err => {
+            //    console.error('Hiba történt a list.php betöltésekor:', err);
+            //});
 
             
         });

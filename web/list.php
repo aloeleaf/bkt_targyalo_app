@@ -24,7 +24,8 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
         'ido'            => $formatted_time,
         'ugyszam'        => $row['ugyszam'] ?? '',
         'persons'        => $row['resztvevok'] ?? '',
-        'azon'           => $row['id'] ?? '', // ha van ilyen oszlopod
+        'azon'           => $row['letszam'] ?? '', 
+        'id'             => $row['id'] ?? '', 
         'ugyminoseg'     => explode("\n", $row['subject'])[0] ?? '',
         'intezkedes'     => explode("\n", $row['subject'])[1] ?? '',
     ];
@@ -85,6 +86,15 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
                                     <div class="row">
                                         <div class="col-12 mb-2"><strong>Intézkedés:</strong> <?= nl2br(htmlspecialchars($data['intezkedes'] ?? 'N/A')); ?></div>
                                     </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <?php if (!empty($data['id'])): ?>
+                                        <a href="#" onclick="loadEditForm(<?= htmlspecialchars($data['id']); ?>); return false;" class="btn btn-primary btn-sm">
+                                            <i class="fa-solid fa-edit"></i> Szerkesztés
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-muted">Nincs azonosító a szerkesztéshez</span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
