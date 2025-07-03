@@ -70,63 +70,6 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
     <script src="assets/js/main.js"></script>
     <script src="assets/js/settings.js"></script>
     <script src="assets/js/list_search.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.addEventListener('submit', function (e) {
-                const form = e.target;
-                if (form && form.id === 'jegyzekForm') {
-                    e.preventDefault();
-
-                    const formData = new FormData(form);
-
-                    fetch('/app/process_entry.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        let html = '<table class="table table-bordered">';
-                        for (const [key, value] of Object.entries(data)) {
-                            html += `<tr><th>${key}</th><td>${value}</td></tr>`;
-                        }
-                        html += '</table>';
-
-                        document.getElementById('resultContent').innerHTML = html;
-
-                        const modalEl = document.getElementById('resultModal'); 
-                        const resultModal = new bootstrap.Modal(modalEl);
-
-                        modalEl.addEventListener('hidden.bs.modal', function () {
-                            window.location.href = 'dashboard.php';
-                        }, { once: true });
-
-                        resultModal.show();
-                    })
-                    .catch(error => {
-                        alert('Hiba történt: ' + error);
-                    });
-                }
-            });
-
-            //fetch('list.php')
-            //.then(res => res.text())
-            //.then(html => {
-            //    const container = document.getElementById('content-area');
-            //    container.innerHTML = html;
-
-            //    initSearch();
-            //})
-            //.catch(err => {
-            //    console.error('Hiba történt a list.php betöltésekor:', err);
-            //});
-
-            
-        });
-    </script>
-
-
-    
     
 </body>
 </html>

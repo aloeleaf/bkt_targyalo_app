@@ -89,7 +89,7 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
                                 </div>
                                 <div class="card-footer text-center">
                                     <?php if (!empty($data['id'])): ?>
-                                        <a href="#" onclick="loadEditForm(<?= htmlspecialchars($data['id']); ?>); return false;" class="btn btn-primary btn-sm">
+                                        <a href="#" class="btn btn-primary btn-sm edit-button" data-id="<?= htmlspecialchars($data['id']); ?>">
                                             <i class="fa-solid fa-edit"></i> Szerkesztés
                                         </a>
                                     <?php else: ?>

@@ -25,6 +25,9 @@ $persons = getDropdownItems($pdo, 'resztvevok');
         <div class="card p-4">
             <h3 class="card-title mb-3 ">Tárgyalási Jegyzék fejléce  </h3>
             <form id="jegyzekForm">
+                <!-- Rejtett ID mező a szerkesztéshez -->
+                <input type="hidden" name="id" id="recordId" value="">
+                <!-- ... a többi űrlap mező ... -->
                 <div class="row g-2 mb-4">
                     <div class="col-md-6">
                         <label for="court_name" class="form-label">Bíróság</label>
@@ -107,7 +110,8 @@ $persons = getDropdownItems($pdo, 'resztvevok');
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success mt-3">Rögzítés és Mentés</button>
+                <button type="submit" class="btn btn-success mt-3" id="jegyzekFormSubmitBtn">Rögzítés és Mentés</button>
+                <button type="button" class="btn btn-secondary mt-3 ms-2" id="cancelEditBtn">Mégse</button>
             </form>
         </div>
         </div>
