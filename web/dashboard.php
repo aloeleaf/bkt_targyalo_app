@@ -66,21 +66,6 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
 
     <div id="content-area" class="container"></div>
     
-    <!-- Modal: ezt tedd a dashboard.php aljára -->
-    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="resultModalLabel">Rögzített adatok</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
-        </div>
-        <div class="modal-body" id="resultContent">
-            <!-- Ide töltjük be az adatokat -->
-        </div>
-        </div>
-    </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.addEventListener('submit', function (e) {
@@ -119,11 +104,59 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
                     });
                 }
             });
+
+            fetch('list.php')
+            .then(res => res.text())
+            .then(html => {
+                const container = document.getElementById('content-area');
+                container.innerHTML = html;
+
+                initSearch();
+            })
+            .catch(err => {
+                console.error('Hiba történt a list.php betöltésekor:', err);
+            });
+
+            function initSearch() {
+                const searchInput = document.getElementById('jegyzokonyvSearch');
+                const jegyzokonyvCards = document.querySelectorAll('.jegyzokonyv-card');
+
+                if (!searchInput) return;
+
+                searchInput.addEventListener('keyup', () => {
+                    const searchTerm = searchInput.value.toLowerCase();
+
+                    jegyzokonyvCards.forEach(card => {
+                        const parentCol = card.closest('.col-12.col-md-6');
+
+                        const ugyszamText = card.querySelector('.card-header').textContent.toLowerCase();
+
+                        const birosagDiv = Array.from(card.querySelectorAll('.card-body .col-12.mb-2'))
+                                            .find(div => div.textContent.includes('Bíróság:'));
+                        const birosagText = birosagDiv ? birosagDiv.textContent.toLowerCase() : '';
+
+                        const tanacsDiv = Array.from(card.querySelectorAll('.card-body .col-12.mb-2'))
+                                            .find(div => div.textContent.includes('Tanács:'));
+                        const tanacsText = tanacsDiv ? tanacsDiv.textContent.toLowerCase() : '';
+
+                        const searchableText = `${ugyszamText} ${birosagText} ${tanacsText}`;
+
+                        if (searchableText.includes(searchTerm)) {
+                            parentCol.style.display = '';
+                        } else {
+                            parentCol.style.display = 'none';
+                        }
+                    });
+                });
+            }
         });
     </script>
 
+
+    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/settings.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/list_search.js"></script>
+    
 </body>
 </html>
