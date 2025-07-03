@@ -1,6 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
+function initSearch() { // Mostantól ez egy sima függvény lesz
     const searchInput = document.getElementById('jegyzokonyvSearch');
-    if (!searchInput) return; // ha nincs keresőmező, ne csináljunk semmit
+    // Fontos: ellenőrizzük, hogy az searchInput létezik-e, mielőtt használnánk
+    if (!searchInput) {
+        console.warn("Keresőmező (jegyzokonyvSearch) nem található.");
+        return; 
+    }
     const jegyzokonyvCards = document.querySelectorAll('.jegyzokonyv-card');
 
     searchInput.addEventListener('keyup', function() {
@@ -8,17 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         jegyzokonyvCards.forEach(card => {
             const parentCol = card.closest('.col-12.col-md-6'); 
-            
-                        const ugyszamText = card.querySelector('.card-header').textContent.toLowerCase();
 
-                        const birosagDiv = Array.from(card.querySelectorAll('.card-body .col-12.mb-2')).find(div => div.textContent.includes('Bíróság:'));
+            const ugyszamText = card.querySelector('.card-header').textContent.toLowerCase();
+
+            const birosagDiv = Array.from(card.querySelectorAll('.card-body .col-12.mb-2')).find(div => div.textContent.includes('Bíróság:'));
             const birosagText = birosagDiv ? birosagDiv.textContent.toLowerCase() : '';
 
-            
             const tanacsDiv = Array.from(card.querySelectorAll('.card-body .col-12.mb-2')).find(div => div.textContent.includes('Tanács:'));
             const tanacsText = tanacsDiv ? tanacsDiv.textContent.toLowerCase() : '';
 
-                        const searchableText = `${ugyszamText} ${birosagText} ${tanacsText}`;
+            const searchableText = `${ugyszamText} ${birosagText} ${tanacsText}`;
 
             if (searchableText.includes(searchTerm)) {
                 parentCol.style.display = '';
@@ -27,4 +30,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
+}

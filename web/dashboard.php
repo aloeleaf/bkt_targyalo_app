@@ -66,6 +66,11 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
 
     <div id="content-area" class="container"></div>
     
+    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/settings.js"></script>
+    <script src="assets/js/list_search.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.addEventListener('submit', function (e) {
@@ -89,10 +94,9 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
 
                         document.getElementById('resultContent').innerHTML = html;
 
-                        const modalEl = document.getElementById('resultModal'); // EZ a helyes név
+                        const modalEl = document.getElementById('resultModal'); 
                         const resultModal = new bootstrap.Modal(modalEl);
 
-                        // Eseményfigyelő a modal bezárására
                         modalEl.addEventListener('hidden.bs.modal', function () {
                             window.location.href = 'dashboard.php';
                         }, { once: true });
@@ -105,58 +109,24 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
                 }
             });
 
-            fetch('list.php')
-            .then(res => res.text())
-            .then(html => {
-                const container = document.getElementById('content-area');
-                container.innerHTML = html;
+            //fetch('list.php')
+            //.then(res => res.text())
+            //.then(html => {
+            //    const container = document.getElementById('content-area');
+            //    container.innerHTML = html;
 
-                initSearch();
-            })
-            .catch(err => {
-                console.error('Hiba történt a list.php betöltésekor:', err);
-            });
+            //    initSearch();
+            //})
+            //.catch(err => {
+            //    console.error('Hiba történt a list.php betöltésekor:', err);
+            //});
 
-            function initSearch() {
-                const searchInput = document.getElementById('jegyzokonyvSearch');
-                const jegyzokonyvCards = document.querySelectorAll('.jegyzokonyv-card');
-
-                if (!searchInput) return;
-
-                searchInput.addEventListener('keyup', () => {
-                    const searchTerm = searchInput.value.toLowerCase();
-
-                    jegyzokonyvCards.forEach(card => {
-                        const parentCol = card.closest('.col-12.col-md-6');
-
-                        const ugyszamText = card.querySelector('.card-header').textContent.toLowerCase();
-
-                        const birosagDiv = Array.from(card.querySelectorAll('.card-body .col-12.mb-2'))
-                                            .find(div => div.textContent.includes('Bíróság:'));
-                        const birosagText = birosagDiv ? birosagDiv.textContent.toLowerCase() : '';
-
-                        const tanacsDiv = Array.from(card.querySelectorAll('.card-body .col-12.mb-2'))
-                                            .find(div => div.textContent.includes('Tanács:'));
-                        const tanacsText = tanacsDiv ? tanacsDiv.textContent.toLowerCase() : '';
-
-                        const searchableText = `${ugyszamText} ${birosagText} ${tanacsText}`;
-
-                        if (searchableText.includes(searchTerm)) {
-                            parentCol.style.display = '';
-                        } else {
-                            parentCol.style.display = 'none';
-                        }
-                    });
-                });
-            }
+            
         });
     </script>
 
 
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/list_search.js"></script>
+    
     
 </body>
 </html>
