@@ -17,6 +17,61 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Segédfüggvény a select elem kiválasztott opciójának beállítására
+    function setSelectedOption(selectElement, valueToSelect) {
+        if (!selectElement || !valueToSelect) return;
+        for (let i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === valueToSelect) {
+                selectElement.selectedIndex = i;
+                return;
+            }
+        }
+    }
+
+    // Funkció a dropdown listák feltöltésére API-ból
+    async function populateDropdowns() {
+        const dropdownsToFetch = {
+            'court_name': 'birosag',
+            'council_name': 'tanacs',
+            'room_number': 'room',
+            'resztvevok': 'resztvevok'
+        };
+
+        for (const [selectId, category] of Object.entries(dropdownsToFetch)) {
+            const selectElement = document.getElementById(selectId);
+            if (!selectElement) continue;
+
+            // Csak akkor töltjük fel, ha még nincsenek opciók (az "Válasszon..." kivételével)
+            // Vagy ha az opciók száma csak 1, ami az alapértelmezett "Válasszon..."
+            if (selectElement.options.length > 1) {
+                // Ha már vannak opciók, töröljük őket, kivéve az elsőt
+                while (selectElement.options.length > 1) {
+                    selectElement.remove(1);
+                }
+            }
+
+            try {
+                const response = await fetch(`app/get_dropdown_items.php?category=${category}`);
+                if (!response.ok) throw new Error(`Hiba az adatok lekérdezésekor a(z) ${category} kategóriához.`);
+                const data = await response.json();
+
+                if (data.success && Array.isArray(data.data)) {
+                    data.data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item;
+                        option.textContent = item;
+                        selectElement.appendChild(option);
+                    });
+                } else {
+                    console.error(`Hiba a(z) ${category} dropdown adatok betöltésekor:`, data.message || 'Ismeretlen hiba');
+                }
+            } catch (error) {
+                console.error(`Hiba a(z) ${category} dropdown betöltésekor:`, error);
+            }
+        }
+    }
+
+
     // Funkció az oldalbetöltés kezelésére
     function loadPage(page, dataId = null) {
         fetch(page)
@@ -38,19 +93,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Ha a rogzites.php-t töltöttük be (akár rögzítésre, akár szerkesztésre),
                 // akkor hívjuk meg a loadEditData függvényt, ha van ID
                 else if (page === 'rogzites.php') {
-                    // Mivel a rogzites.php-ban vannak a select elemek,
-                    // feltölthetjük azokat a PHP által generált opciókkal.
-                    // Az adatfeltöltés csak akkor történik meg, ha van dataId.
-                    if (dataId !== null) {
-                        loadEditData(dataId);
-                    } else {
-                        // Ha új rögzítés, akkor is be kell állítani az eseményfigyelőt
-                        // a jegyzekForm űrlapra
-                        const jegyzekForm = document.getElementById('jegyzekForm');
-                        if (jegyzekForm) {
-                            jegyzekForm.addEventListener('submit', handleNewEntrySubmit); // Új függvény az új bejegyzés rögzítéséhez
+                    // Először feltöltjük a dropdown listákat
+                    populateDropdowns().then(() => {
+                        // Az adatfeltöltés csak akkor történik meg, ha van dataId.
+                        // Ezt a then() blokkba tesszük, hogy a dropdownok már feltöltődjenek,
+                        // mielőtt megpróbáljuk kiválasztani az értékeket.
+                        if (dataId !== null) {
+                            loadEditData(dataId);
+                        } else {
+                            // Ha új rögzítés, akkor is be kell állítani az eseményfigyelőt
+                            // a jegyzekForm űrlapra
+                            const jegyzekForm = document.getElementById('jegyzekForm');
+                            if (jegyzekForm) {
+                                jegyzekForm.addEventListener('submit', handleNewEntrySubmit); // Új függvény az új bejegyzés rögzítéséhez
+                            }
+                            // Reseteljük az űrlapot új rögzítés esetén
+                            jegyzekForm.reset();
+                            // Visszaállítjuk a címet és gombot eredeti állapotba
+                            const formTitle = contentArea.querySelector('h2');
+                            if (formTitle) {
+                                formTitle.textContent = 'Tárgyalási Jegyzék Rögzítése';
+                            }
+                            const submitBtn = document.getElementById('jegyzekFormSubmitBtn');
+                            if (submitBtn) {
+                                submitBtn.innerHTML = 'Rögzítés és Mentés';
+                                submitBtn.classList.remove('btn-primary');
+                                submitBtn.classList.add('btn-success');
+                            }
+                            // Rejtett ID mező törlése
+                            document.getElementById('recordId').value = '';
                         }
-                    }
+                    });
                 }
             })
             .catch(error => {
@@ -74,11 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Rejtett ID mező
                     document.getElementById('recordId').value = jegyzokonyv.id || '';
 
-                    // Select mezők feltöltése
-                    document.getElementById('court_name').value = jegyzokonyv.birosag || '';
-                    document.getElementById('council_name').value = jegyzokonyv.tanacs || '';
-                    document.getElementById('room_number').value = jegyzokonyv.rooms || '';
-                    document.getElementById('resztvevok').value = jegyzokonyv.resztvevok || '';
+                    // Select mezők feltöltése (MIUTÁN a populateDropdowns lefutott)
+                    setSelectedOption(document.getElementById('court_name'), jegyzokonyv.birosag);
+                    setSelectedOption(document.getElementById('council_name'), jegyzokonyv.tanacs);
+                    setSelectedOption(document.getElementById('room_number'), jegyzokonyv.rooms);
+                    setSelectedOption(document.getElementById('resztvevok'), jegyzokonyv.resztvevok);
 
                     // Input/textarea mezők feltöltése
                     document.getElementById('date').value = jegyzokonyv.date || '';
@@ -119,12 +192,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else {
-                    showMessage('editMessage', data.message || 'Hiba az adatok betöltésekor.', 'danger');
+                    showMessage('formMessage', data.message || 'Hiba az adatok betöltésekor.', 'danger');
                     loadPage('list.php'); // Hiba esetén visszatérünk a listanézetre
                 }
             })
             .catch(error => {
-                showMessage('editMessage', `Hiba az adatok lekérdezésekor: ${error.message}`, 'danger');
+                showMessage('formMessage', `Hiba az adatok lekérdezésekor: ${error.message}`, 'danger');
                 loadPage('list.php'); // Hiba esetén visszatérünk a listanézetre
             });
     }
@@ -146,17 +219,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             if (data.success) {
-                // showMessage('editMessage', 'Sikeres rögzítés!', 'success'); // Ha van üzenet div a rogzites.php-ban
-                alert('Sikeres rögzítés!'); // Ideiglenes alert
+                showMessage('formMessage', 'Sikeres rögzítés!', 'success'); 
                 loadPage('list.php'); // Sikeres rögzítés után visszatérünk a listanézetre
             } else {
-                // showMessage('editMessage', data.message || 'Hiba történt a rögzítéskor.', 'danger');
-                alert('Hiba történt a rögzítéskor: ' + (data.message || 'Ismeretlen hiba'));
+                showMessage('formMessage', data.message || 'Hiba történt a rögzítéskor.', 'danger');
             }
         })
         .catch(error => {
-            // showMessage('editMessage', `Hiba a rögzítés során: ${error.message}`, 'danger');
-            alert('Hiba a rögzítés során: ' + error.message);
+            showMessage('formMessage', `Hiba a rögzítés során: ${error.message}`, 'danger');
         });
     }
 
@@ -178,14 +248,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             if (data.success) {
-                showMessage('editMessage', data.message, 'success');
+                showMessage('formMessage', data.message, 'success');
                 loadPage('list.php'); // Sikeres mentés után visszatérünk a listanézetre
             } else {
-                showMessage('editMessage', data.message || 'Hiba történt a mentéskor.', 'danger');
+                showMessage('formMessage', data.message || 'Hiba történt a mentéskor.', 'danger');
             }
         })
         .catch(error => {
-            showMessage('editMessage', `Hiba a mentés során: ${error.message}`, 'danger');
+            showMessage('formMessage', `Hiba a mentés során: ${error.message}`, 'danger');
         });
     }
 
@@ -211,25 +281,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Eseménydelegálás a contentArea-ra a dinamikusan betöltött elemekhez
     contentArea.addEventListener('click', function(e) {
         // Ellenőrizzük, hogy a kattintás egy "edit-button" osztályú elemen történt-e
-        console.log('Click event on contentArea. Target:', e.target); // Debug: Látjuk, mi lett kattintva
         const closestButton = e.target.closest('.edit-button');
         if (closestButton) {
-            console.log('Edit button clicked. Preventing default...'); // Debug: Látjuk, ha az edit gombot találtuk el
             e.preventDefault(); // Megakadályozzuk a link alapértelmezett viselkedését
             const id = closestButton.getAttribute('data-id');
             if (id) {
-                console.log('Loading edit form for ID:', id); // Debug: Látjuk, milyen ID-vel hívjuk
-                // Meghívjuk a szerkesztő űrlap betöltését a rogzites.php-val
-                // A loadPage függvény hívja majd a loadEditData-t, miután az űrlap betöltődött
-                loadPage('rogzites.php', id); 
+                loadPage('rogzites.php', id); // Meghívjuk a szerkesztő űrlap betöltését a rogzites.php-val
             } else {
                 console.error('Hiányzó ID a szerkesztés gombhoz.');
             }
-        } else {
-            console.log('Not an edit button click within contentArea.'); // Debug: Látjuk, ha nem az edit gomb volt
         }
     });
-
-    // A dashboard.php-ban lévő form submit kezelését átvittük ide a handleNewEntrySubmit-be.
-    // Így a dashboard.php belső scriptjéből ezt a részt el lehet távolítani.
 });
