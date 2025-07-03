@@ -13,13 +13,15 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Átalakítjuk a mezőket a megjelenítéshez
 $filtered_jegyzokonyvek = array_map(function ($row) {
+    $time = $row['time'] ?? '';
+    $formatted_time = $time ? substr($time, 0, 5) : '';
     return [
         'court_name'     => $row['birosag'] ?? '',
         'council_name'   => $row['tanacs'] ?? '',
         'session_date'   => $row['date'] ?? '',
         'room_number'    => $row['rooms'] ?? '',
         'sorszam'        => $row['sorszam'] ?? '',
-        'ido'            => $row['time'] ?? '',
+        'ido'            => $formatted_time,
         'ugyszam'        => $row['ugyszam'] ?? '',
         'persons'        => $row['resztvevok'] ?? '',
         'azon'           => $row['id'] ?? '', // ha van ilyen oszlopod
