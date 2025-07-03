@@ -38,77 +38,70 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
-    </head>
-    
+</head>
 <body>
     <div class="container mt-5">
         <h1 class="mb-4 text-center mt-custom-top-margin">Tárgyalási Jegyzékek Listája </h1>
 
-        <?php if (empty($filtered_jegyzokonyvek)): ?>
-            <div class="alert alert-info" role="alert">
-                Nincs megjeleníthető jegyzőkönyv az elmúlt 4 hétből.
-            </div>
-        <?php else: ?>
-            <?php foreach ($filtered_jegyzokonyvek as $data): ?>
-                <div class="card jegyzokonyv-card">
-                    <div class="card-header" style="padding-left: 385px;">
-                        Tárgyalási Jegyzék - <?php echo htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?> (<?php echo htmlspecialchars($data['session_date'] ?? 'N/A'); ?>)
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered table-sm jegyzokonyv-table">
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Bíróság:</th>
-                                    <td><?php echo htmlspecialchars($data['court_name'] ?? 'N/A'); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Tanács:</th>
-                                    <td><?php echo htmlspecialchars($data['council_name'] ?? 'N/A'); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Dátum:</th>
-                                    <td><?php echo htmlspecialchars($data['date'] ?? 'N/A'); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Tárgyaló:</th>
-                                    <td><?php echo htmlspecialchars($data['room_number'] ?? 'N/A'); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Sorszám:</th>
-                                    <td><?php echo htmlspecialchars($data['sorszam'] ?? 'N/A'); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Idő:</th>
-                                    <td><?php echo htmlspecialchars($data['ido'] ?? 'N/A'); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Ügyszám:</th>
-                                    <td><?php echo htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Résztvevők:</th>
-                                    <td><?php echo nl2br(htmlspecialchars($data['persons'] ?? 'N/A')); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Id.:</th>
-                                    <td><?php echo htmlspecialchars($data['letszam'] ?? 'N/A'); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Ügyminőség:</th>
-                                    <td><?php echo nl2br(htmlspecialchars($data['ugyminoseg'] ?? 'N/A')); ?></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Intézkedés:</th>
-                                    <td><?php echo nl2br(htmlspecialchars($data['intezkedes'] ?? 'N/A')); ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+        <div class="mb-4">
+            <input type="text" class="form-control" id="jegyzokonyvSearch" placeholder="Keresés az ügyszám, és bírósági tanács alapján...">
+        </div>
 
+        <div id="jegyzokonyvListContainer">
+            <?php if (empty($filtered_jegyzokonyvek)): ?>
+                <div class="alert alert-info" role="alert">
+                    Nincs megjeleníthető jegyzőkönyv az elmúlt 4 hétből.
+                </div>
+            <?php else: ?>
+                <div class="row">
+                    <?php foreach ($filtered_jegyzokonyvek as $data): ?>
+                        <div class="col-12 col-md-6 mb-4">
+                            <div class="card jegyzokonyv-card h-100">
+                                <div class="card-header text-center">
+                                    Tárgyalási Jegyzék - <?php echo htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?> (<?php echo htmlspecialchars($data['session_date'] ?? 'N/A'); ?>)
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Bíróság:</strong> <?= htmlspecialchars($data['court_name'] ?? 'N/A'); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Tanács:</strong> <?= htmlspecialchars($data['council_name'] ?? 'N/A'); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Dátum:</strong> <?= htmlspecialchars($data['session_date'] ?? 'N/A'); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Tárgyaló:</strong> <?= htmlspecialchars($data['room_number'] ?? 'N/A'); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Sorszám:</strong> <?= htmlspecialchars($data['sorszam'] ?? 'N/A'); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Idő:</strong> <?= htmlspecialchars($data['ido'] ?? 'N/A'); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Ügyszám:</strong> <?= htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Résztvevők:</strong> <?= nl2br(htmlspecialchars($data['persons'] ?? 'N/A')); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Id.:</strong> <?= htmlspecialchars($data['azon'] ?? 'N/A'); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Ügyminőség:</strong> <?= nl2br(htmlspecialchars($data['ugyminoseg'] ?? 'N/A')); ?></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 mb-2"><strong>Intézkedés:</strong> <?= nl2br(htmlspecialchars($data['intezkedes'] ?? 'N/A')); ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div> <?php endif; ?>
+        </div>
+    </div>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
+    <script src="assets/js/list_search.js"></script>
+    </body>
 </html>
