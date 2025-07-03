@@ -31,17 +31,6 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
 }, $rows);
 ?>
 
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tárgyalási Jegyzékek Listája</title>
-    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/fontawesome/css/all.min.css" rel="stylesheet">
-    <link href="assets/css/main.css" rel="stylesheet">
-</head>
-<body>
     <div class="container mt-5">
         <h1 class="mb-4 text-center mt-custom-top-margin">Tárgyalási Jegyzékek Listája </h1>
 
@@ -103,7 +92,4 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
                 </div> <?php endif; ?>
         </div>
     </div>
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/list_search.js"></script>
-    </body>
-</html>
+    
