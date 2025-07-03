@@ -20,18 +20,11 @@ $rooms = getDropdownItems($pdo, 'room');
 $persons = getDropdownItems($pdo, 'resztvevok'); 
 
 ?>
-
-<h1 class="mb-4">Tárgyalási Jegyzék Rögzítése</h1>
-
-        <div class="card p-4">
-            <h3 class="card-title mb-3">Tárgyalási Jegyzék fejléce  </h3>
-            <form action="/app/process_entry.php" method="POST">
-=======
-<h1 class="mb-4 text-center">Tárgyalási Jegyzék Rögzítése</h1>
+<h2 class="mb-4 text-center">Tárgyalási Jegyzék Rögzítése</h2>
 
         <div class="card p-4">
             <h3 class="card-title mb-3 ">Tárgyalási Jegyzék fejléce  </h3>
-            <form action="process_entry.php" method="POST">
+            <form id="jegyzekForm">
                 <div class="row g-2 mb-4">
                     <div class="col-md-6">
                         <label for="court_name" class="form-label">Bíróság</label>
@@ -116,4 +109,5 @@ $persons = getDropdownItems($pdo, 'resztvevok');
 
                 <button type="submit" class="btn btn-success mt-3">Rögzítés és Mentés</button>
             </form>
+        </div>
         </div>
