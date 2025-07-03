@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('jegyzokonyvSearch');
+    if (!searchInput) return; // ha nincs keresőmező, ne csináljunk semmit
     const jegyzokonyvCards = document.querySelectorAll('.jegyzokonyv-card');
 
     searchInput.addEventListener('keyup', function() {
