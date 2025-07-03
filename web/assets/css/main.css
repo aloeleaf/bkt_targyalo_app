@@ -80,7 +80,6 @@ body.no-flex {
 }
 
 .btn-success {
-    /* Ide írod a stílusokat */
     background-color:#8B2323; 
     font-weight: bold;
     border-color: black;
@@ -104,25 +103,22 @@ body.no-flex {
      
 }
 
-/* A kártya, ami az űrlapot tartalmazza */
 .card {
-    background-color: rgba(255, 255, 255, 0.4); /* Nagyon világos kék háttér */
-    border: 2px solid  #A52A2A; /* Világoskék keret */
-    border-radius: 12px; /* Még jobban lekerekített sarkok */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Kicsit erősebb, de finom árnyék */
-    padding: 30px; /* Nagyobb belső térköz */
+    background-color: rgba(255, 255, 255, 0.4); 
+    border: 2px solid  #A52A2A; 
+    border-radius: 12px; 
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); 
+    padding: 30px; 
 }
 
-/* Input mezők, select boxok és textarea-k általános stílusa */
 .form-control,
 .form-select {
-    border: 1px solid #ced4da; /* Világos szürke keret */
-    
-    border-radius: 5px; /* Enyhén lekerekített sarkok */
-    padding: 8px 12px; /* Kicsit nagyobb belső térköz */
-    font-size: 0.95em; /* Kicsit nagyobb betűméret */
-    color: #574a49; /* Sötétebb szövegszín */
-    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Átmenet fókuszra */
+    border: 1px solid #ced4da; 
+    border-radius: 5px; 
+    padding: 8px 12px; 
+    font-size: 0.95em; 
+    color: #574a49; 
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
 }
 
 
