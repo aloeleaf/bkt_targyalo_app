@@ -41,10 +41,10 @@ function loadList(type) {
         const li = document.createElement('li');
         li.textContent = item.value + ' ';
         const btn = document.createElement('button');
-        btn.classList.add('btn', 'btn-sm', 'btn-danger'); // opcionális bootstrap gomb stílus
+        btn.classList.add('btn', 'btn-sm', 'btn-light'); // opcionális bootstrap gomb stílus
         btn.title = 'Törlés'; // tooltip        
         const icon = document.createElement('i'); // ikon létrehozása
-        icon.classList.add('fa', 'fa-trash'); // vagy 'fas', 'fa-trash' a verziódtól függően
+        icon.classList.add('fa-solid', 'fa-trash'); // vagy 'fas', 'fa-trash' a verziódtól függően
         btn.appendChild(icon);
         btn.onclick = () => deleteItem(item.id, type);
         li.appendChild(btn);
