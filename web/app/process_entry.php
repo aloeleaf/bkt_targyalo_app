@@ -44,7 +44,7 @@ try {
         ':birosag' => $birosag,
         ':tanacs' => $tanacs,
         ':date' => $date,
-        ':time' => $time,
+        ':time' => date('H:i', strtotime($time)),
         ':rooms' => $room,
         ':ugyszam' => $ugyszam,
         ':subject' => $subject,
