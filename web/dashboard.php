@@ -97,7 +97,6 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
                         const modalEl = document.getElementById('resultModal'); 
                         const resultModal = new bootstrap.Modal(modalEl);
 
-                        // Eseményfigyelő a modal bezárására
                         modalEl.addEventListener('hidden.bs.modal', function () {
                             window.location.href = 'dashboard.php';
                         }, { once: true });
