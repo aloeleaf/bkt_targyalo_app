@@ -93,13 +93,11 @@ body.no-flex {
     font-size: 0.85em;       
     padding: 8px 15px;       
 }
-
 .btn.btn-sm.btn-light {
     background-color: rgba(255, 255, 255, 0.4); 
      border-color: #A52A2A;
      
 }
-
 .card {
     background-color: rgba(255, 255, 255, 0.4); 
     border: 2px solid  #A52A2A; 
@@ -107,9 +105,7 @@ body.no-flex {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); 
     padding: 30px; 
 }
-
-.form-control,
-.form-select {
+.form-control, .form-select {
     border: 1px solid #ced4da; 
     border-radius: 5px; 
     padding: 8px 12px; 

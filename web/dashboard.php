@@ -8,7 +8,6 @@ if (!Auth::isAuthenticated()) {
 }
 $nev = $_SESSION['display_name'] ?? $_SESSION['user'];
 $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
-//echo date_default_timezone_get();
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +35,6 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
                         <a class="nav-link load-page" href="#" data-page="rogzites.php"><i class="fa-solid fa-list-check"></i> Rögzítés</a>
                     </li>';
             }
-
             if (in_array('BKT_WebLoginGroupAdmin', $_SESSION['groups'])) {
                 echo '<li class="nav-item">
                         <a class="nav-link load-page" href="#" data-page="list.php"><i class="fa-solid fa-people-roof"></i> Tárgyalási jegyzékek</a>
