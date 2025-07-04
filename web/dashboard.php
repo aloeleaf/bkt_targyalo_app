@@ -20,6 +20,7 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/main.css" rel="stylesheet" />
     <link href="assets/fontawesome/css/all.css" rel="stylesheet" />
+    <meta name="author" content="Martínez Luis Dávid & Papp Ágoston" />
 </head>
 <body class="no-flex">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -66,6 +67,13 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
 
     <div id="content-area" class="container"></div>
     
+    <footer>
+        <div class="container">
+            <p>&copy; <?php echo date("Y"); ?> | Budapest Környéki Törvényszék | Minden jog fenntartva. <br />
+            Készítette: Martínez Luis Dávid & Papp Ágoston</p>
+        </div>
+    </footer>
+
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/settings.js"></script>
