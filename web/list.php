@@ -35,16 +35,15 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
     <div class="container mt-5">
         <h1 class="mb-4 text-center mt-custom-top-margin">Tárgyalási Bejegyzések Listája </h1>
 
-        <div class="mb-4">
-            <!-- Az ID megtartva a JS kompatibilitás miatt, de a placeholder módosítva -->
-            <input type="text" class="form-control" id="jegyzokonyvSearch" placeholder="Keresés az ügyszám, bíróság és tanács alapján...">
-        </div>
-        
-        <!-- Új export gomb hozzáadása -->
-        <div class="mb-4 text-end">
-            <button id="exportCsvBtn" class="btn btn-info btn-sm">
-                <i class="fa-solid fa-file-csv"></i> Exportálás CSV-be
-            </button>
+        <div class="row mb-4 align-items-center"> <!-- Új sor a kereső és export gombnak -->
+            <div class="col-md-9"> <!-- Keresőmező oszlopa -->
+                <input type="text" class="form-control" id="jegyzokonyvSearch" placeholder="Keresés az ügyszám, bíróság és tanács alapján...">
+            </div>
+            <div class="col-md-3 text-end"> <!-- Export gomb oszlopa, jobbra igazítva -->
+                <button id="exportCsvBtn" class="btn btn-info btn-sm">
+                    <i class="fa-solid fa-file-csv"></i> Exportálás CSV-be
+                </button>
+            </div>
         </div>
 
         <div id="jegyzokonyvListContainer">
