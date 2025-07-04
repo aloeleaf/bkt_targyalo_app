@@ -26,9 +26,17 @@ body.no-flex {
 .navbar {
     margin-bottom: 20px;
 }
+.logout-button{
+    background-color: #8B2323;
+    color:#faf8f8
+}
+.logout-button:hover{
+     background-color: #A52A2A;
+}
 .container {
     margin-top: 20px;
 }
+
 
 .btn-brown {
     background-color: #A52A2A; 
@@ -107,8 +115,27 @@ body.no-flex {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); 
     padding: 30px; 
 }
+#jegyzokonyvSearch{
+     background-color: rgba(255, 255, 255, 0.6);
+     border: 2px solid  #A52A2A;
+}
 
-.form-control,
+#exportCsvBtn{
+    background-color: rgba(255, 255, 255, 0.9);
+     border: 2px solid  #A52A2A;
+}
+#exportCsvBtn:hover {
+    background-color: #A52A2A;
+}
+.edit-button{
+    background-color: #8B2323;
+    border-color: #333;
+}
+.edit-button:hover {
+    background-color: #A52A2A;
+    border-color: #333;
+}
+.form-control 
 .form-select {
     border: 1px solid #ced4da; 
     border-radius: 5px; 

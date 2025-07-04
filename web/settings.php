@@ -8,7 +8,6 @@
     <link href="assets/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="assets/css/settings.css" rel="stylesheet"> </head>
 <body>
-
 <div class="container mt-5">
     <h1 class="text-center mb-5">Adminisztrációs felület</h1>
 

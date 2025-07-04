@@ -58,7 +58,7 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
                         <span class="nav-link text-white">Belépés ideje: <?= htmlspecialchars($loginIdo) ?></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light btn-sm ms-2" href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Kijelentkezés</a>
+                        <a class="nav-link btn btn-outline-light btn-sm ms-2 logout-button" href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Kijelentkezés</a>
                     </li>
                 </ul>
             </div>
