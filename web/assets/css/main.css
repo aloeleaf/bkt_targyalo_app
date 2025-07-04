@@ -11,7 +11,7 @@ body {
     min-height: 100vh;
     background-color: #f8f9fa; 
 }
-..btn-primary:hover {
+.btn-primary:hover {
     background-color: #8B2323 !important; 
     border-color:#333 !important; 
 }
