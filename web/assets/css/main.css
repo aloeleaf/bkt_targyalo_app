@@ -1,5 +1,5 @@
 body {
-    padding-top: 56px;
+    padding-top: 80px;
     background-image: url('../img/login-background.jpg');
     background-size: cover; 
     background-position: center center; 
@@ -87,7 +87,7 @@ body.no-flex {
     background-color: #A52A2A;
 }
 .btn-light {
-    background-color: rgba(255, 255, 255, 0.4); 
+    background-color: rgba(255, 255, 255, 0.6); 
     color: #333;             
     border: 1px solid #ccc;  
     font-size: 0.85em;       
@@ -95,13 +95,13 @@ body.no-flex {
 }
 
 .btn.btn-sm.btn-light {
-    background-color: rgba(255, 255, 255, 0.4); 
+    background-color: rgba(255, 255, 255, 0.6); 
      border-color: #A52A2A;
      
 }
 
 .card {
-    background-color: rgba(255, 255, 255, 0.4); 
+    background-color: rgba(255, 255, 255, 0.6); 
     border: 2px solid  #A52A2A; 
     border-radius: 12px; 
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); 
@@ -149,5 +149,7 @@ ul li {
     color: #495057;
     display: list-item; 
 }
-
-
+.form-control {
+    border-color:#8B2323;
+    background-color: rgba(255, 255, 255, 0.6);
+}
