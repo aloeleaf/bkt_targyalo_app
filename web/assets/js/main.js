@@ -400,7 +400,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // CSV fejlécek (oszlopnevek)
                 const headers = Object.keys(data[0]);
                 const csvRows = [];
-                csvRows.push(headers.join(';')); // Fejlécek pontosvesszővel elválasztva
+                // Hozzáadjuk a BOM-ot az UTF-8 kódoláshoz, hogy Excelben is jól jelenjen meg
+                csvRows.push('\ufeff' + headers.join(';')); // BOM hozzáadása
 
                 // Adatsorok hozzáadása
                 data.forEach(row => {
