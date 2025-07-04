@@ -145,8 +145,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Funkció az oldalbetöltés kezelésére
-    function loadPage(page, dataId = null) {
-        fetch(page)
+    // Hozzáadva a 'params' objektumot a rugalmasabb paraméterkezeléshez
+    function loadPage(page, dataId = null, params = {}) { 
+        let url = page;
+        const urlParams = new URLSearchParams();
+
+        // Kezeljük az 'id' paramétert, ha van
+        if (dataId !== null) {
+            urlParams.append('id', dataId);
+        }
+
+        // Kezeljük az 'orderBy' paramétert, ha list.php-ról van szó
+        if (page === 'list.php') {
+            // Ha a params objektumban van orderBy, azt használjuk
+            // Különben, ha már létezik a select elem, annak értékét
+            // Vagy alapértelmezésként 'date'-et
+            const currentSortBy = params.orderBy || document.getElementById('sortOrderSelect')?.value || 'date';
+            urlParams.append('orderBy', currentSortBy);
+        }
+
+        // Összefűzzük az URL-t a paraméterekkel
+        const queryString = urlParams.toString();
+        if (queryString) {
+            url += (url.includes('?') ? '&' : '?') + queryString;
+        }
+
+        console.log('loadPage: Betöltendő URL:', url); // Debugging
+
+        fetch(url)
             .then(response => {
                 if (!response.ok) throw new Error('Hiba a betöltés során');
                 return response.text();
@@ -157,6 +183,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Ha a list.php-t töltöttük be, akkor inicializáljuk a keresőt
                 if (page === 'list.php') {
                     initSearch();
+                    // Beállítjuk a legördülő menü kiválasztott értékét az URL paraméter alapján
+                    const currentUrlParams = new URLSearchParams(window.location.search);
+                    const orderByParam = currentUrlParams.get('orderBy');
+                    if (orderByParam) {
+                        setSelectedOption(document.getElementById('sortOrderSelect'), orderByParam);
+                    }
                 } 
                 // Ha settings.php-t töltünk be, akkor hívjuk meg a reloadAllLists() függvényt
                 else if (page === 'settings.php' && typeof reloadAllLists === 'function') {
@@ -195,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             // Rejtett ID mező törlése
                             document.getElementById('recordId').value = '';
 
-                            // Eseményfigyelő a "Mégse" gombra az új rögzítés módban is
+                            // ÚJ: Eseményfigyelő a "Mégse" gombra az új rögzítés módban is
                             const cancelBtn = document.getElementById('cancelEditBtn');
                             if (cancelBtn) {
                                 cancelBtn.addEventListener('click', function() {
