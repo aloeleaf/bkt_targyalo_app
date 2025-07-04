@@ -38,6 +38,13 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
         <div class="mb-4">
             <input type="text" class="form-control" id="jegyzokonyvSearch" placeholder="Keresés az ügyszám, és bírósági tanács alapján...">
         </div>
+        
+        <!-- Új export gomb hozzáadása -->
+        <div class="mb-4 text-end">
+            <button id="exportCsvBtn" class="btn btn-info btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Exportálás CSV-be
+            </button>
+        </div>
 
         <div id="jegyzokonyvListContainer">
             <?php if (empty($filtered_jegyzokonyvek)): ?>
@@ -102,4 +109,3 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
                 </div> <?php endif; ?>
         </div>
     </div>
-    
