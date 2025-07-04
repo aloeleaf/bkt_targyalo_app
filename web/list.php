@@ -6,6 +6,37 @@ require_once __DIR__ . '/app/Database.php';
 $db = new Database($config);
 $pdo = $db->getPdo();
 
+// Alapértelmezett rendezési paraméterek
+$orderBy = 'date';
+$orderDir = 'DESC';
+
+// Ha van rendezési paraméter az URL-ben, használjuk azt
+if (isset($_GET['orderBy'])) {
+    switch ($_GET['orderBy']) {
+        case 'date':
+            $orderBy = 'date';
+            $orderDir = 'DESC';
+            break;
+        case 'room_number':
+            $orderBy = 'rooms'; // Az adatbázis oszlop neve
+            $orderDir = 'ASC';
+            break;
+        case 'council_name':
+            $orderBy = 'tanacs'; // Az adatbázis oszlop neve
+            $orderDir = 'ASC';
+            break;
+        case 'ugyszam':
+            $orderBy = 'ugyszam';
+            $orderDir = 'ASC';
+            break;
+        default:
+            // Alapértelmezett, ha érvénytelen paramétert kapunk
+            $orderBy = 'date';
+            $orderDir = 'DESC';
+            break;
+    }
+}
+
 // Adatok lekérése az elmúlt 4 hétből (ha szükséges szűrés)
 $stmt = $pdo->prepare("SELECT * FROM rooms WHERE date >= CURDATE() - INTERVAL 28 DAY ORDER BY date DESC, time ASC");
 $stmt->execute();
@@ -36,10 +67,18 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
         <h1 class="mb-4 text-center mt-custom-top-margin">Tárgyalási Bejegyzések Listája </h1>
 
         <div class="row mb-4 align-items-center"> <!-- Új sor a kereső és export gombnak -->
-            <div class="col-md-9"> <!-- Keresőmező oszlopa -->
+            <div class="col-md-7"> <!-- Keresőmező oszlopa -->
                 <input type="text" class="form-control" id="Search" placeholder="Keresés az ügyszám, bíróság és tanács alapján...">
             </div>
-            <div class="col-md-3 text-end"> <!-- Export gomb oszlopa, jobbra igazítva -->
+            <div class="col-md-3"> <!-- Rendezési opciók oszlopa -->
+                <select class="form-select form-select-sm" id="sortOrderSelect">
+                    <option value="date" <?= ($orderBy === 'date' ? 'selected' : '') ?>>Rendezés: Dátum szerint</option>
+                    <option value="ugyszam" <?= ($orderBy === 'ugyszam' ? 'selected' : '') ?>>Rendezés: Ügyszám szerint</option>
+                    <option value="room_number" <?= ($orderBy === 'room_number' ? 'selected' : '') ?>>Rendezés: Tárgyaló szerint</option>
+                    <option value="council_name" <?= ($orderBy === 'council_name' ? 'selected' : '') ?>>Rendezés: Tanács szerint</option>
+                </select>
+            </div>
+            <div class="col-md-2 text-end"> <!-- Export gomb oszlopa, jobbra igazítva -->
                 <button id="exportCsvBtn" class="btn btn-info btn-sm">
                     <i class="fa-solid fa-file-csv"></i> Exportálás CSV-be
                 </button>
