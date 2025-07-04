@@ -38,7 +38,7 @@ try {
             'ido'            => $formatted_time,
             'ugyszam'        => $row['ugyszam'] ?? '',
             'resztvevok'     => $row['resztvevok'] ?? '',
-            'azon'           => $row['letszam'] ?? '', // 'Id.' mező
+            'azon'           => $row['letszam'] ?? '', 
             'ugyminoseg'     => $subject_parts[0] ?? '',
             'intezkedes'     => $subject_parts[1] ?? '',
         ];

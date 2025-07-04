@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funkció a kereső inicializálására és a DOM átrendezésére
     function initSearch() {
-        console.log('initSearch: Kereső inicializálása.');
+        //console.log('initSearch: Kereső inicializálása.');
         const searchInput = document.getElementById('jegyzokonyvSearch'); // Az ID megmarad a list.php-ból
         const entryCardsContainer = document.getElementById('jegyzokonyvListContainer'); // A kártyák konténere
 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Eseményfigyelő a keresőmező bemenetére
         searchInput.addEventListener('input', function() {
             const searchTerm = searchInput.value.toLowerCase();
-            console.log('initSearch: Keresési kifejezés:', searchTerm);
+            //console.log('initSearch: Keresési kifejezés:', searchTerm);
 
             // KULCSFONTOSSÁGÚ VÁLTOZTATÁS: A szülő oszlop div-eket gyűjtjük be
             const allEntryColumns = Array.from(entryCardsContainer.querySelectorAll('.col-12.col-md-6.mb-4'));
@@ -140,11 +140,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             entryCardsContainer.appendChild(fragment);
 
-
-            console.log('initSearch: Keresés és DOM átrendezés befejezve.');
+            //console.log('initSearch: Keresés és DOM átrendezés befejezve.');
         });
     }
-
 
     // Funkció az oldalbetöltés kezelésére
     function loadPage(page, dataId = null) {
@@ -196,6 +194,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             }
                             // Rejtett ID mező törlése
                             document.getElementById('recordId').value = '';
+
+                            // Eseményfigyelő a "Mégse" gombra az új rögzítés módban is
+                            const cancelBtn = document.getElementById('cancelEditBtn');
+                            if (cancelBtn) {
+                                cancelBtn.addEventListener('click', function() {
+                                    loadPage('list.php'); // Vissza a listanézetre
+                                });
+                            }
                         }
                     });
                 }
@@ -283,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const form = e.target;
         const formData = new FormData(form);
 
-        fetch('/app/process_entry.php', { // Feltételezve, hogy ez az API az új rögzítéshez
+        fetch('/app/process_entry.php', { 
             method: 'POST',
             body: formData
         })
@@ -306,7 +312,6 @@ document.addEventListener('DOMContentLoaded', function () {
             showMessage('formMessage', `Hiba a rögzítés során: ${error.message}`, 'danger');
         });
     }
-
 
     // Funkció a szerkesztő űrlap AJAX-os beküldésének kezelésére
     function handleEditFormSubmit(e) {
@@ -362,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function () {
     contentArea.addEventListener('click', function(e) {
         // Ellenőrizzük, hogy a kattintás egy "edit-button" osztályú elemen történt-e
         const closestButton = e.target.closest('.edit-button');
-        const exportButton = e.target.closest('#exportCsvBtn'); // Új: export gomb ellenőrzése
+        const exportButton = e.target.closest('#exportCsvBtn'); // export gomb ellenőrzése
 
         if (closestButton) {
             e.preventDefault(); // Megakadályozzuk a link alapértelmezett viselkedését

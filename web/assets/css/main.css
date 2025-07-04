@@ -101,13 +101,11 @@ body.no-flex {
     font-size: 0.85em;       
     padding: 8px 15px;       
 }
-
 .btn.btn-sm.btn-light {
     background-color: rgba(255, 255, 255, 0.6); 
      border-color: #A52A2A;
      
 }
-
 .card {
     background-color: rgba(255, 255, 255, 0.6); 
     border: 2px solid  #A52A2A; 
@@ -115,6 +113,7 @@ body.no-flex {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); 
     padding: 30px; 
 }
+
 #jegyzokonyvSearch{
      background-color: rgba(255, 255, 255, 0.6);
      border: 2px solid  #A52A2A;

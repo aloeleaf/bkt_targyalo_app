@@ -56,7 +56,7 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
                 <div class="row">
                     <?php foreach ($filtered_entries as $data): ?>
                         <div class="col-12 col-md-6 mb-4">
-                            <div class="card entry-card h-100"> <!-- Osztály neve módosítva -->
+                            <div class="card entry-card h-100"> 
                                 <div class="card-header text-center">
                                     Tárgyalási Bejegyzés - <?php echo htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?> (<?php echo htmlspecialchars($data['session_date'] ?? 'N/A'); ?>)
                                 </div>

@@ -11,7 +11,6 @@
                     <option value="">Válasszon...</option>
                     <?php
                     // Ide illeszd be a PHP foreach ciklust a $courts tömbhöz
-                    // Forrás: Az eredeti kód, a $courts változó felhasználása
                     if (!empty($courts)) {
                         foreach ($courts as $court): ?>
                             <option value="<?php echo htmlspecialchars($court); ?>"><?php echo htmlspecialchars($court); ?></option>
