@@ -194,6 +194,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             }
                             // Rejtett ID mező törlése
                             document.getElementById('recordId').value = '';
+
+                            // Eseményfigyelő a "Mégse" gombra az új rögzítés módban is
+                            const cancelBtn = document.getElementById('cancelEditBtn');
+                            if (cancelBtn) {
+                                cancelBtn.addEventListener('click', function() {
+                                    loadPage('list.php'); // Vissza a listanézetre
+                                });
+                            }
                         }
                     });
                 }
