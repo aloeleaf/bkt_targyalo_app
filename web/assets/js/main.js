@@ -85,15 +85,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Funkció a kereső inicializálására és a DOM átrendezésére
     function initSearch() {
         //console.log('initSearch: Kereső inicializálása.');
-        const searchInput = document.getElementById('jegyzokonyvSearch'); // Az ID megmarad a list.php-ból
-        const entryCardsContainer = document.getElementById('jegyzokonyvListContainer'); // A kártyák konténere
+        const searchInput = document.getElementById('Search'); // Az ID megmarad a list.php-ból
+        const entryCardsContainer = document.getElementById('ListContainer'); // A kártyák konténere
 
         if (!searchInput) {
-            console.warn('initSearch: A kereső input (#jegyzokonyvSearch) nem található.');
+            console.warn('initSearch: A kereső input (#Search) nem található.');
             return;
         }
         if (!entryCardsContainer) {
-            console.warn('initSearch: A bejegyzés kártyák konténere (#jegyzokonyvListContainer) nem található.');
+            console.warn('initSearch: A bejegyzés kártyák konténere (#ListContainer) nem található.');
             return;
         }
 
@@ -386,7 +386,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Funkció az adatok CSV-be exportálásához
     async function exportToCsv() {
         try {
-            const response = await fetch('app/get_list_data.php'); // Lekérjük az adatokat az új API-ról
+            // Lekérjük a kiválasztott rendezési szempontot
+            const sortBy = document.getElementById('sortOrderSelect')?.value || 'date'; // Alapértelmezett: dátum
+            const response = await fetch(`app/get_list_data.php?orderBy=${sortBy}`); // Elküldjük a rendezési paramétert
             if (!response.ok) throw new Error('Hiba az adatok lekérdezésekor a CSV exportáláshoz.');
             const result = await response.json();
 
@@ -400,7 +402,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // CSV fejlécek (oszlopnevek)
                 const headers = Object.keys(data[0]);
                 const csvRows = [];
-                csvRows.push(headers.join(';')); // Fejlécek pontosvesszővel elválasztva
+                // Hozzáadjuk a BOM-ot az UTF-8 kódoláshoz, hogy Excelben is jól jelenjen meg
+                csvRows.push('\ufeff' + headers.join(';')); // BOM hozzáadása
 
                 // Adatsorok hozzáadása
                 data.forEach(row => {

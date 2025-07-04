@@ -1,16 +1,16 @@
 function initSearch() { 
-    const searchInput = document.getElementById('jegyzokonyvSearch');
+    const searchInput = document.getElementById('Search');
     // ellenőrizzük, hogy az searchInput létezik-e, mielőtt használnánk
     if (!searchInput) {
-        console.warn("Keresőmező (jegyzokonyvSearch) nem található.");
+        console.warn("Keresőmező (Search) nem található.");
         return; 
     }
-    const jegyzokonyvCards = document.querySelectorAll('.jegyzokonyv-card');
+    const listCards = document.querySelectorAll('.list-card');
 
     searchInput.addEventListener('keyup', function() {
         const searchTerm = searchInput.value.toLowerCase();
 
-        jegyzokonyvCards.forEach(card => {
+        listCards.forEach(card => {
             const parentCol = card.closest('.col-12.col-md-6'); 
 
             const ugyszamText = card.querySelector('.card-header').textContent.toLowerCase();

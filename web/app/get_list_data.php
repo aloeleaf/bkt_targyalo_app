@@ -16,9 +16,41 @@ $response = [
     'data' => []
 ];
 
+// Alapértelmezett rendezési paraméterek
+$orderBy = 'date';
+$orderDir = 'DESC';
+
+// Ha van rendezési paraméter az URL-ben, használjuk azt
+if (isset($_GET['orderBy'])) {
+    switch ($_GET['orderBy']) {
+        case 'date':
+            $orderBy = 'date';
+            $orderDir = 'DESC';
+            break;
+        case 'room_number':
+            $orderBy = 'rooms'; // Az adatbázis oszlop neve
+            $orderDir = 'ASC';
+            break;
+        case 'council_name':
+            $orderBy = 'tanacs'; // Az adatbázis oszlop neve
+            $orderDir = 'ASC';
+            break;
+        case 'ugyszam':
+            $orderBy = 'ugyszam';
+            $orderDir = 'ASC';
+            break;
+        default:
+            // Alapértelmezett, ha érvénytelen paramétert kapunk
+            $orderBy = 'date';
+            $orderDir = 'DESC';
+            break;
+    }
+}
+
 try {
-    // Adatok lekérése az elmúlt 4 hétből (ugyanaz a logika, mint a list.php-ban)
-    $stmt = $pdo->prepare("SELECT * FROM rooms WHERE date >= CURDATE() - INTERVAL 28 DAY ORDER BY date DESC, time ASC");
+    // Adatok lekérése az elmúlt 4 hétből a kiválasztott rendezés szerint
+    // Fontos: Az ORDER BY záradékot dinamikusan illesztjük be, de csak megbízható forrásból származó oszlopnevekkel!
+    $stmt = $pdo->prepare("SELECT * FROM rooms WHERE date >= CURDATE() - INTERVAL 28 DAY ORDER BY " . $orderBy . " " . $orderDir . ", time ASC");
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
