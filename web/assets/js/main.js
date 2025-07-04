@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Funkció a kereső inicializálására
+    // Funkció a kereső inicializálására és a DOM átrendezésére
     function initSearch() {
         console.log('initSearch: Kereső inicializálása.');
         const searchInput = document.getElementById('jegyzokonyvSearch'); // Az ID megmarad a list.php-ból
@@ -97,29 +97,51 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Eseményfigyelő a keresőmező bemenetére
         searchInput.addEventListener('input', function() {
             const searchTerm = searchInput.value.toLowerCase();
             console.log('initSearch: Keresési kifejezés:', searchTerm);
 
-            // Lekérjük az összes bejegyzés kártyát a konténerből
-            const entryCards = entryCardsContainer.querySelectorAll('.entry-card');
+            // KULCSFONTOSSÁGÚ VÁLTOZTATÁS: A szülő oszlop div-eket gyűjtjük be
+            const allEntryColumns = Array.from(entryCardsContainer.querySelectorAll('.col-12.col-md-6.mb-4'));
+            const matchingColumns = [];
+            const nonMatchingColumns = [];
 
-            if (entryCards.length === 0) {
-                console.warn('initSearch: Nincsenek bejegyzés kártyák (.entry-card) a konténerben.');
-                return;
-            }
+            allEntryColumns.forEach(columnDiv => {
+                const card = columnDiv.querySelector('.entry-card'); // Megkeressük a kártyát az oszlopon belül
+                if (!card) return; // Ha nincs kártya az oszlopban, kihagyjuk
 
-            entryCards.forEach(card => {
-                // A teljes kártya szöveges tartalmát használjuk a kereséshez
                 const cardText = card.textContent.toLowerCase();
-
                 if (cardText.includes(searchTerm)) {
-                    card.style.display = ''; // Megjelenítjük a kártyát
+                    matchingColumns.push(columnDiv);
+                    columnDiv.style.display = ''; // Megjelenítjük a teljes oszlopot
                 } else {
-                    card.style.display = 'none'; // Elrejtjük a kártyát
+                    nonMatchingColumns.push(columnDiv);
+                    columnDiv.style.display = 'none'; // Elrejtjük a teljes oszlopot
                 }
             });
-            console.log('initSearch: Keresés befejezve.');
+
+            // DOM átrendezése: Először a találatok, majd a nem találatok (rejtve)
+            const fragment = document.createDocumentFragment();
+
+            // Hozzáadjuk a találatokat a fragmenthez
+            matchingColumns.forEach(columnDiv => {
+                fragment.appendChild(columnDiv);
+            });
+
+            // Hozzáadjuk a nem találatokat a fragmenthez (ezek rejtve maradnak)
+            nonMatchingColumns.forEach(columnDiv => {
+                fragment.appendChild(columnDiv);
+            });
+
+            // Töröljük a konténer összes gyermekét, majd hozzáadjuk a fragmentet
+            while (entryCardsContainer.firstChild) {
+                entryCardsContainer.removeChild(entryCardsContainer.firstChild);
+            }
+            entryCardsContainer.appendChild(fragment);
+
+
+            console.log('initSearch: Keresés és DOM átrendezés befejezve.');
         });
     }
 
@@ -135,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 contentArea.innerHTML = html;
 
                 // Ha a list.php-t töltöttük be, akkor inicializáljuk a keresőt
-                if (page === 'list.php') { // A typeof initSearch === 'function' ellenőrzés már nem szükséges, mivel itt van definiálva
+                if (page === 'list.php') {
                     initSearch();
                 } 
                 // Ha settings.php-t töltünk be, akkor hívjuk meg a reloadAllLists() függvényt
