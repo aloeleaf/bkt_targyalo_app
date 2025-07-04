@@ -75,7 +75,7 @@ $loginIdo = $_SESSION['login_time'] ?? 'ismeretlen időpont';
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/settings.js"></script>
-    <script src="assets/js/list_search.js"></script>
+    <!-- <script src="assets/js/list_search.js"></script> -->
     
 </body>
 </html>
