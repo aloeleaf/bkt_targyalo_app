@@ -386,7 +386,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Funkció az adatok CSV-be exportálásához
     async function exportToCsv() {
         try {
-            const response = await fetch('app/get_list_data.php'); // Lekérjük az adatokat az új API-ról
+            // Lekérjük a kiválasztott rendezési szempontot
+            const sortBy = document.getElementById('sortOrderSelect')?.value || 'date'; // Alapértelmezett: dátum
+            const response = await fetch(`app/get_list_data.php?orderBy=${sortBy}`); // Elküldjük a rendezési paramétert
             if (!response.ok) throw new Error('Hiba az adatok lekérdezésekor a CSV exportáláshoz.');
             const result = await response.json();
 
