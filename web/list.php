@@ -85,13 +85,12 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
             </div>
         </div>
 
-        <div id="ListContainer">
+        <div id="ListContainer" class="row">
             <?php if (empty($filtered_entries)): ?>
                 <div class="alert alert-info" role="alert">
                     Nincs megjeleníthető bejegyzés az elmúlt 4 hétből.
                 </div>
             <?php else: ?>
-                <div class="row">
                     <?php foreach ($filtered_entries as $data): ?>
                         <div class="col-12 col-md-6 mb-4">
                             <div class="card entry-card h-100"> 
@@ -145,6 +144,6 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
                             </div>
                         </div>
                     <?php endforeach; ?>
-                </div> <?php endif; ?>
+                 <?php endif; ?>
         </div>
     </div>
