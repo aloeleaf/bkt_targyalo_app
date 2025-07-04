@@ -49,17 +49,17 @@ body.no-flex {
     border-color: #8B2323;
 }
 
-.jegyzokonyv-table {
+.list-table {
      max-width: 800px;
      margin: 0 auto;
 }
-.jegyzokonyv-table th {
+.list-table th {
      width: 150px; 
      text-align: right;
      padding-right: 15px;
      vertical-align: top; 
 }
-.jegyzokonyv-table td {
+.list-table td {
      vertical-align: top; 
         }
 .list-card {
