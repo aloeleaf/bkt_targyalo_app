@@ -83,7 +83,7 @@ body.no-flex {
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.6);
   border-radius: 4px;
 }
 .btn-success {
@@ -107,7 +107,7 @@ body.no-flex {
      
 }
 .card {
-    background-color: rgba(255, 255, 255, 0.6); 
+    background-color: rgba(255, 255, 255, 0.5); 
     border: 2px solid  #A52A2A; 
     border-radius: 12px; 
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); 
