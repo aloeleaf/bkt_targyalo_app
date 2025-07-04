@@ -19,6 +19,8 @@ $response = [
 // Alapértelmezett rendezési paraméterek
 $orderBy = 'date';
 $orderDir = 'DESC';
+$secondaryOrderBy = 'time';
+$secondaryOrderDir = 'ASC';
 
 // Ha van rendezési paraméter az URL-ben, használjuk azt
 if (isset($_GET['orderBy'])) {
@@ -26,31 +28,55 @@ if (isset($_GET['orderBy'])) {
         case 'date':
             $orderBy = 'date';
             $orderDir = 'DESC';
+            $secondaryOrderBy = 'time';
+            $secondaryOrderDir = 'ASC';
             break;
         case 'room_number':
             $orderBy = 'rooms'; // Az adatbázis oszlop neve
             $orderDir = 'ASC';
+            $secondaryOrderBy = 'date'; // Másodlagos rendezés
+            $secondaryOrderDir = 'ASC';
             break;
         case 'council_name':
             $orderBy = 'tanacs'; // Az adatbázis oszlop neve
             $orderDir = 'ASC';
+            $secondaryOrderBy = 'date'; // Másodlagos rendezés
+            $secondaryOrderDir = 'ASC';
             break;
         case 'ugyszam':
             $orderBy = 'ugyszam';
             $orderDir = 'ASC';
+            $secondaryOrderBy = 'date'; // Másodlagos rendezés
+            $secondaryOrderDir = 'ASC';
+            break;
+        case 'room_date_time': // ÚJ RENDEZÉSI SZEMPONT
+            $orderBy = 'rooms';
+            $orderDir = 'ASC';
+            $secondaryOrderBy = 'date, time'; // Több oszlop a másodlagos rendezéshez
+            $secondaryOrderDir = 'ASC'; // Mindkettő ASC
             break;
         default:
             // Alapértelmezett, ha érvénytelen paramétert kapunk
             $orderBy = 'date';
             $orderDir = 'DESC';
+            $secondaryOrderBy = 'time';
+            $secondaryOrderDir = 'ASC';
             break;
     }
 }
 
 try {
     // Adatok lekérése az elmúlt 4 hétből a kiválasztott rendezés szerint
-    // Fontos: Az ORDER BY záradékot dinamikusan illesztjük be, de csak megbízható forrásból származó oszlopnevekkel!
-    $stmt = $pdo->prepare("SELECT * FROM rooms WHERE date >= CURDATE() - INTERVAL 28 DAY ORDER BY " . $orderBy . " " . $orderDir . ", time ASC");
+    // A secondaryOrderBy már tartalmazhatja a 'date, time' részt, ha a 'room_date_time' van kiválasztva
+    $sqlOrderClause = $orderBy . " " . $orderDir;
+    if ($secondaryOrderBy && $secondaryOrderBy !== 'time') { // Ne duplázzuk meg a 'time' rendezést, ha már az 'orderBy' része
+        $sqlOrderClause .= ", " . $secondaryOrderBy . " " . $secondaryOrderDir;
+    } else if ($secondaryOrderBy === 'time' && $orderBy !== 'date') {
+        // Ha az alapértelmezett időrendezés van, de nem dátum szerint rendezünk elsődlegesen
+        $sqlOrderClause .= ", " . $secondaryOrderBy . " " . $secondaryOrderDir;
+    }
+
+    $stmt = $pdo->prepare("SELECT * FROM rooms WHERE date >= CURDATE() - INTERVAL 28 DAY ORDER BY " . $sqlOrderClause);
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
