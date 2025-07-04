@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const links = document.querySelectorAll('.load-page');
     const contentArea = document.getElementById('content-area'); // Ez a fő tartalomterület
+    const MESSAGE_DISPLAY_DURATION = 3000; // 3 másodperc az üzenet megjelenítésére
 
     // Segédfüggvény az üzenetek megjelenítéséhez
     function showMessage(elementId, message, type) {
@@ -11,20 +12,31 @@ document.addEventListener('DOMContentLoaded', function () {
             messageDiv.textContent = message;
             messageDiv.className = `alert alert-${type}`;
             messageDiv.classList.remove('d-none');
+            // Az üzenet elrejtése a beállított idő után
             setTimeout(() => {
                 messageDiv.classList.add('d-none');
-            }, 5000); // Üzenet elrejtése 5 másodperc után
+            }, MESSAGE_DISPLAY_DURATION); 
         }
     }
 
     // Segédfüggvény a select elem kiválasztott opciójának beállítására
     function setSelectedOption(selectElement, valueToSelect) {
         if (!selectElement || !valueToSelect) return;
+        let found = false;
         for (let i = 0; i < selectElement.options.length; i++) {
             if (selectElement.options[i].value === valueToSelect) {
                 selectElement.selectedIndex = i;
-                return;
+                found = true;
+                
+                // Kiváltunk egy 'change' eseményt, hogy a böngésző frissítse a vizuális megjelenítést
+                const event = new Event('change');
+                selectElement.dispatchEvent(event);
+
+                break;
             }
+        }
+        if (!found) {
+            console.warn(`setSelectedOption: Az érték ("${valueToSelect}") nem található a(z) ${selectElement.id} select elem opciói között.`);
         }
     }
 
@@ -39,15 +51,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         for (const [selectId, category] of Object.entries(dropdownsToFetch)) {
             const selectElement = document.getElementById(selectId);
-            if (!selectElement) continue;
+            if (!selectElement) {
+                console.warn(`populateDropdowns: A(z) ${selectId} select elem nem található a DOM-ban.`);
+                continue;
+            }
 
-            // Csak akkor töltjük fel, ha még nincsenek opciók (az "Válasszon..." kivételével)
-            // Vagy ha az opciók száma csak 1, ami az alapértelmezett "Válasszon..."
-            if (selectElement.options.length > 1) {
-                // Ha már vannak opciók, töröljük őket, kivéve az elsőt
-                while (selectElement.options.length > 1) {
-                    selectElement.remove(1);
-                }
+            // Töröljük a meglévő opciókat, kivéve az elsőt ("Válasszon...")
+            while (selectElement.options.length > 1) { 
+                selectElement.remove(1); 
             }
 
             try {
@@ -63,12 +74,53 @@ document.addEventListener('DOMContentLoaded', function () {
                         selectElement.appendChild(option);
                     });
                 } else {
-                    console.error(`Hiba a(z) ${category} dropdown adatok betöltésekor:`, data.message || 'Ismeretlen hiba');
+                    console.error(`populateDropdowns: Hiba a(z) ${category} dropdown adatok betöltésekor:`, data.message || 'Ismeretlen hiba');
                 }
             } catch (error) {
-                console.error(`Hiba a(z) ${category} dropdown betöltésekor:`, error);
+                console.error(`populateDropdowns: Hiba a(z) ${category} dropdown betöltésekor:`, error);
             }
         }
+    }
+
+    // Funkció a kereső inicializálására
+    function initSearch() {
+        console.log('initSearch: Kereső inicializálása.');
+        const searchInput = document.getElementById('jegyzokonyvSearch'); // Az ID megmarad a list.php-ból
+        const entryCardsContainer = document.getElementById('jegyzokonyvListContainer'); // A kártyák konténere
+
+        if (!searchInput) {
+            console.warn('initSearch: A kereső input (#jegyzokonyvSearch) nem található.');
+            return;
+        }
+        if (!entryCardsContainer) {
+            console.warn('initSearch: A bejegyzés kártyák konténere (#jegyzokonyvListContainer) nem található.');
+            return;
+        }
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            console.log('initSearch: Keresési kifejezés:', searchTerm);
+
+            // Lekérjük az összes bejegyzés kártyát a konténerből
+            const entryCards = entryCardsContainer.querySelectorAll('.entry-card');
+
+            if (entryCards.length === 0) {
+                console.warn('initSearch: Nincsenek bejegyzés kártyák (.entry-card) a konténerben.');
+                return;
+            }
+
+            entryCards.forEach(card => {
+                // A teljes kártya szöveges tartalmát használjuk a kereséshez
+                const cardText = card.textContent.toLowerCase();
+
+                if (cardText.includes(searchTerm)) {
+                    card.style.display = ''; // Megjelenítjük a kártyát
+                } else {
+                    card.style.display = 'none'; // Elrejtjük a kártyát
+                }
+            });
+            console.log('initSearch: Keresés befejezve.');
+        });
     }
 
 
@@ -83,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 contentArea.innerHTML = html;
 
                 // Ha a list.php-t töltöttük be, akkor inicializáljuk a keresőt
-                if (page === 'list.php' && typeof initSearch === 'function') {
+                if (page === 'list.php') { // A typeof initSearch === 'function' ellenőrzés már nem szükséges, mivel itt van definiálva
                     initSearch();
                 } 
                 // Ha settings.php-t töltünk be, akkor hívjuk meg a reloadAllLists() függvényt
@@ -112,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             // Visszaállítjuk a címet és gombot eredeti állapotba
                             const formTitle = contentArea.querySelector('h2');
                             if (formTitle) {
-                                formTitle.textContent = 'Tárgyalási Jegyzék Rögzítése';
+                                formTitle.textContent = 'Új Tárgyalási Bejegyzés Rögzítése'; // Cím módosítva
                             }
                             const submitBtn = document.getElementById('jegyzekFormSubmitBtn');
                             if (submitBtn) {
@@ -141,32 +193,32 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 if (data.success && data.data) {
-                    const jegyzokonyv = data.data;
+                    const entryData = data.data; // Változó neve módosítva
                     
                     // Feltöltjük az űrlap mezőit az adatokkal
                     // Rejtett ID mező
-                    document.getElementById('recordId').value = jegyzokonyv.id || '';
+                    document.getElementById('recordId').value = entryData.id || '';
 
                     // Select mezők feltöltése (MIUTÁN a populateDropdowns lefutott)
-                    setSelectedOption(document.getElementById('court_name'), jegyzokonyv.birosag);
-                    setSelectedOption(document.getElementById('council_name'), jegyzokonyv.tanacs);
-                    setSelectedOption(document.getElementById('room_number'), jegyzokonyv.rooms);
-                    setSelectedOption(document.getElementById('resztvevok'), jegyzokonyv.resztvevok);
+                    // Itt használjuk a setSelectedOption függvényt
+                    setSelectedOption(document.getElementById('court_name'), entryData.birosag);
+                    setSelectedOption(document.getElementById('council_name'), entryData.tanacs);
+                    setSelectedOption(document.getElementById('room_number'), entryData.rooms);
+                    setSelectedOption(document.getElementById('resztvevok'), entryData.resztvevok);
 
                     // Input/textarea mezők feltöltése
-                    document.getElementById('date').value = jegyzokonyv.date || '';
-                    // Módosítva: sorszam_display és sorszam_hidden helyett most már csak 'sorszam'
-                    document.getElementById('sorszam').value = jegyzokonyv.sorszam || ''; 
-                    document.getElementById('ido').value = jegyzokonyv.time ? jegyzokonyv.time.substring(0, 5) : ''; // Idő formázása hh:mm-re
-                    document.getElementById('ugyszam').value = jegyzokonyv.ugyszam || '';
-                    document.getElementById('letszam').value = jegyzokonyv.letszam || '';
-                    document.getElementById('ugyminoseg').value = jegyzokonyv.ugyminoseg || '';
-                    document.getElementById('intezkedes').value = jegyzokonyv.intezkedes || '';
+                    document.getElementById('date').value = entryData.date || '';
+                    document.getElementById('sorszam').value = entryData.sorszam || ''; 
+                    document.getElementById('ido').value = entryData.time ? entryData.time.substring(0, 5) : ''; // Idő formázása hh:mm-re
+                    document.getElementById('ugyszam').value = entryData.ugyszam || '';
+                    document.getElementById('letszam').value = entryData.letszam || '';
+                    document.getElementById('ugyminoseg').value = entryData.ugyminoseg || '';
+                    document.getElementById('intezkedes').value = entryData.intezkedes || '';
 
                     // Módosítjuk az űrlap címét és a gomb szövegét
                     const formTitle = contentArea.querySelector('h2');
                     if (formTitle) {
-                        formTitle.textContent = 'Tárgyalási Jegyzék Szerkesztése';
+                        formTitle.textContent = 'Tárgyalási Bejegyzés Szerkesztése'; // Cím módosítva
                     }
                     const submitBtn = document.getElementById('jegyzekFormSubmitBtn');
                     if (submitBtn) {
@@ -220,7 +272,10 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 showMessage('formMessage', 'Sikeres rögzítés!', 'success'); 
-                loadPage('list.php'); // Sikeres rögzítés után visszatérünk a listanézetre
+                // Késleltetjük az oldalbetöltést, hogy az üzenet látható legyen
+                setTimeout(() => {
+                    loadPage('list.php'); 
+                }, MESSAGE_DISPLAY_DURATION);
             } else {
                 showMessage('formMessage', data.message || 'Hiba történt a rögzítéskor.', 'danger');
             }
@@ -249,7 +304,10 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 showMessage('formMessage', data.message, 'success');
-                loadPage('list.php'); // Sikeres mentés után visszatérünk a listanézetre
+                // Késleltetjük az oldalbetöltést, hogy az üzenet látható legyen
+                setTimeout(() => {
+                    loadPage('list.php'); 
+                }, MESSAGE_DISPLAY_DURATION);
             } else {
                 showMessage('formMessage', data.message || 'Hiba történt a mentéskor.', 'danger');
             }
@@ -340,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (link.download !== undefined) { // Modern böngészők támogatása
                     const url = URL.createObjectURL(blob);
                     link.setAttribute('href', url);
-                    link.setAttribute('download', 'jegyzokonyvek_' + new Date().toISOString().slice(0,10) + '.csv');
+                    link.setAttribute('download', 'bejegyzesek_' + new Date().toISOString().slice(0,10) + '.csv'); // Fájlnév módosítva
                     link.style.visibility = 'hidden';
                     document.body.appendChild(link);
                     link.click();

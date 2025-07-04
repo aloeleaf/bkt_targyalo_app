@@ -12,7 +12,7 @@ $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Átalakítjuk a mezőket a megjelenítéshez
-$filtered_jegyzokonyvek = array_map(function ($row) {
+$filtered_entries = array_map(function ($row) { // Változó neve módosítva
     $time = $row['time'] ?? '';
     $formatted_time = $time ? substr($time, 0, 5) : '';
     return [
@@ -33,10 +33,11 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
 ?>
 
     <div class="container mt-5">
-        <h1 class="mb-4 text-center mt-custom-top-margin">Tárgyalási Jegyzékek Listája </h1>
+        <h1 class="mb-4 text-center mt-custom-top-margin">Tárgyalási Bejegyzések Listája </h1>
 
         <div class="mb-4">
-            <input type="text" class="form-control" id="jegyzokonyvSearch" placeholder="Keresés az ügyszám, és bírósági tanács alapján...">
+            <!-- Az ID megtartva a JS kompatibilitás miatt, de a placeholder módosítva -->
+            <input type="text" class="form-control" id="jegyzokonyvSearch" placeholder="Keresés az ügyszám, bíróság és tanács alapján...">
         </div>
         
         <!-- Új export gomb hozzáadása -->
@@ -47,17 +48,17 @@ $filtered_jegyzokonyvek = array_map(function ($row) {
         </div>
 
         <div id="jegyzokonyvListContainer">
-            <?php if (empty($filtered_jegyzokonyvek)): ?>
+            <?php if (empty($filtered_entries)): ?>
                 <div class="alert alert-info" role="alert">
-                    Nincs megjeleníthető jegyzőkönyv az elmúlt 4 hétből.
+                    Nincs megjeleníthető bejegyzés az elmúlt 4 hétből.
                 </div>
             <?php else: ?>
                 <div class="row">
-                    <?php foreach ($filtered_jegyzokonyvek as $data): ?>
+                    <?php foreach ($filtered_entries as $data): ?>
                         <div class="col-12 col-md-6 mb-4">
-                            <div class="card jegyzokonyv-card h-100">
+                            <div class="card entry-card h-100"> <!-- Osztály neve módosítva -->
                                 <div class="card-header text-center">
-                                    Tárgyalási Jegyzék - <?php echo htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?> (<?php echo htmlspecialchars($data['session_date'] ?? 'N/A'); ?>)
+                                    Tárgyalási Bejegyzés - <?php echo htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?> (<?php echo htmlspecialchars($data['session_date'] ?? 'N/A'); ?>)
                                 </div>
                                 <div class="card-body">
                                     <div class="row">

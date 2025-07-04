@@ -25,45 +25,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $stmt = $pdo->prepare("SELECT * FROM rooms WHERE id = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            $jegyzokonyv = $stmt->fetch(PDO::FETCH_ASSOC);
+            $entry_data = $stmt->fetch(PDO::FETCH_ASSOC); // Változó neve módosítva
 
-            if ($jegyzokonyv) {
+            if ($entry_data) {
                 // A 'subject' mező felosztása 'ugyminoseg'-re és 'intezkedes'-re
-                $subject_parts = explode("\n", $jegyzokonyv['subject'] ?? '');
-                $jegyzokonyv['ugyminoseg'] = $subject_parts[0] ?? '';
-                $jegyzokonyv['intezkedes'] = $subject_parts[1] ?? '';
+                $subject_parts = explode("\n", $entry_data['subject'] ?? '');
+                $entry_data['ugyminoseg'] = $subject_parts[0] ?? '';
+                $entry_data['intezkedes'] = $subject_parts[1] ?? '';
 
                 $response['success'] = true;
-                $response['data'] = $jegyzokonyv;
+                $response['data'] = $entry_data;
             } else {
-                $response['message'] = 'A megadott azonosítóval nem található jegyzőkönyv.';
+                $response['message'] = 'A megadott azonosítóval nem található bejegyzés.'; // Üzenet módosítva
             }
         } catch (PDOException $e) {
             $response['message'] = 'Adatbázis hiba a lekérdezéskor: ' . $e->getMessage();
         }
     } else {
-        $response['message'] = 'Nincs megadva jegyzőkönyv azonosító a lekérdezéshez.';
+        $response['message'] = 'Nincs megadva bejegyzés azonosító a lekérdezéshez.'; // Üzenet módosítva
     }
 } 
 // Adatok frissítése (POST kérés)
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // DEBUG: Naplózzuk a teljes $_POST tömböt a szerver logjába
+    error_log("edit_entry_api.php - Received POST data: " . print_r($_POST, true));
+
     // Ellenőrizzük, hogy minden szükséges adat megérkezett-e
     if (isset($_POST['id']) && is_numeric($_POST['id'])) {
         $id = $_POST['id'];
-        $birosag = $_POST['birosag'] ?? '';
-        $tanacs = $_POST['tanacs'] ?? '';
+        // KULCSFONTOSSÁGÚ VÁLTOZTATÁS: $_POST kulcsok igazítása a rogzites.php name attribútumaihoz
+        $birosag = $_POST['court_name'] ?? ''; 
+        $tanacs = $_POST['council_name'] ?? '';
         $date = $_POST['date'] ?? '';
-        $rooms = $_POST['rooms'] ?? '';
+        $rooms = $_POST['room_number'] ?? ''; 
         $sorszam = $_POST['sorszam'] ?? '';
-        $time = $_POST['time'] ?? '';
+        $time = $_POST['ido'] ?? ''; 
         $ugyszam = $_POST['ugyszam'] ?? '';
-        $persons = $_POST['persons'] ?? '';
+        $persons = $_POST['resztvevok'] ?? '';
         $letszam = $_POST['letszam'] ?? '';
         $ugyminoseg = $_POST['ugyminoseg'] ?? '';
         $intezkedes = $_POST['intezkedes'] ?? '';
 
+        // Validáció: Ellenőrizzük a kötelező mezőket
+        if (empty($birosag) || empty($tanacs) || empty($date) || empty($rooms) || empty($ugyszam) || empty($time)) {
+            $response['message'] = 'Hiányzó kötelező mező(k): Bíróság, Tanács, Dátum, Tárgyaló, Ügyszám, Idő.';
+            echo json_encode($response);
+            exit; // Kilépés, ha a validáció sikertelen
+        }
+
+        $time_for_db = date('H:i:s', strtotime($time)); 
+
         // A 'subject' mező visszaállítása a két részből
-        $subject = $ugyminoseg . "\n" . $intezkedes;
+        $subject = trim($ugyminoseg . "\n" . $intezkedes);
 
         try {
             $stmt = $pdo->prepare("UPDATE rooms SET 
@@ -84,7 +97,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':date', $date);
             $stmt->bindParam(':rooms', $rooms);
             $stmt->bindParam(':sorszam', $sorszam);
-            $stmt->bindParam(':time', $time);
+            $stmt->bindParam(':time', $time_for_db); 
             $stmt->bindParam(':ugyszam', $ugyszam);
             $stmt->bindParam(':persons', $persons);
             $stmt->bindParam(':letszam', $letszam);
@@ -93,9 +106,9 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->execute()) {
                 $response['success'] = true;
-                $response['message'] = 'A jegyzőkönyv sikeresen frissítve!';
+                $response['message'] = 'A bejegyzés sikeresen frissítve!'; // Üzenet módosítva
             } else {
-                $response['message'] = 'Hiba történt a jegyzőkönyv frissítésekor.';
+                $response['message'] = 'Hiba történt a bejegyzés frissítésekor.'; // Üzenet módosítva
             }
         } catch (PDOException $e) {
             $response['message'] = 'Adatbázis hiba a frissítéskor: ' . $e->getMessage();

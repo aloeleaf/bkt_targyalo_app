@@ -18,28 +18,25 @@ $resztvevok = $_POST['resztvevok'] ?? '';
 $letszam = $_POST['letszam'] ?? '';
 $ugyminoseg = $_POST['ugyminoseg'] ?? '';
 $intezkedes = $_POST['intezkedes'] ?? '';
+$sorszam = $_POST['sorszam'] ?? ''; // Hozzáadva: sorszám lekérése a POST adatokból
 
 
 // Az ügyminőség és intézkedés összefűzése a subject mezőbe
 $subject = trim($ugyminoseg . "\n" . $intezkedes);
 
-// Ha szeretnél, beállíthatsz alapértelmezett értéket a letszamhoz
-//$letszam = 0; // vagy pl. számold meg a résztvevők számát, ha van ilyen mező a formban
-
-//echo '<pre>';
-//print_r($_POST);
-//echo '</pre>';
-
 // Egyszerű validáció
 if (!$birosag || !$tanacs || !$date || !$time || !$room) {
-    die('Hiányzó kötelező mező(k).');
+    // Hibaüzenet JSON formátumban
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Hiányzó kötelező mező(k).']);
+    exit; // Fontos, hogy kilépjünk a szkriptből
 }
 
 header('Content-Type: application/json');
 
 try {
-    $stmt = $pdo->prepare("INSERT INTO rooms (birosag, tanacs, date, time, rooms, ugyszam, subject, letszam, resztvevok)
-                           VALUES (:birosag, :tanacs, :date, :time, :rooms, :ugyszam, :subject, :letszam, :resztvevok)");
+    $stmt = $pdo->prepare("INSERT INTO rooms (birosag, tanacs, date, time, rooms, ugyszam, subject, letszam, resztvevok, sorszam)
+                            VALUES (:birosag, :tanacs, :date, :time, :rooms, :ugyszam, :subject, :letszam, :resztvevok, :sorszam)");
     $stmt->execute([
         ':birosag' => $birosag,
         ':tanacs' => $tanacs,
@@ -50,10 +47,10 @@ try {
         ':subject' => $subject,
         ':letszam' => $letszam,
         ':resztvevok' => $resztvevok,
+        ':sorszam' => $sorszam, // Hozzáadva: sorszám paraméter
     ]);
     
     echo json_encode(['success' => true, 'message' => 'Sikeres rögzítés']);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Hiba: ' . $e->getMessage()]);
 }
-
