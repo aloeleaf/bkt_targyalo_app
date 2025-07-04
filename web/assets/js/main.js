@@ -157,19 +157,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Kezeljük az 'orderBy' paramétert, ha list.php-ról van szó
         if (page === 'list.php') {
-            // Ha a params objektumban van orderBy, azt használjuk
-            // Különben, ha már létezik a select elem, annak értékét
-            // Vagy alapértelmezésként 'date'-et
+            // Prioritize params.orderBy, then current select value, then default 'date'
             const currentSortBy = params.orderBy || document.getElementById('sortOrderSelect')?.value || 'date';
             urlParams.append('orderBy', currentSortBy);
         }
 
-        // Összefűzzük az URL-t a paraméterekkel
+        // Build the query string
         const queryString = urlParams.toString();
         if (queryString) {
             url += (url.includes('?') ? '&' : '?') + queryString;
         }
 
+        // KULCSFONTOSSÁGÚ VÁLTOZTATÁS: Cache-busting paraméter hozzáadása
+        // Ez biztosítja, hogy a böngésző ne a gyorsítótárból szolgálja ki a kérést
+        url += (url.includes('?') ? '&' : '?') + `_t=${new Date().getTime()}`;
+        
         console.log('loadPage: Betöltendő URL:', url); // Debugging
 
         fetch(url)
