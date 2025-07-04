@@ -4,24 +4,6 @@
 // mert a dashboard.php már betölti a szükséges JS fájlokat, és az adatok feltöltése
 // a main.js-ben történik AJAX-on keresztül.
 
-// A dropdown elemeket (courts, councils, rooms, persons) itt már nem kérdezzük le,
-// feltételezzük, hogy ezek az adatok valamilyen módon a kliens oldalon is elérhetőek
-// vagy a szerkesztés API-ból jönnek, ha szerkesztésről van szó.
-// Ha feltétlenül szükségesek a PHP által generált dropdown opciók,
-// akkor a loadEditData függvénynek kellene valahogy lekérdeznie őket,
-// vagy a rogzites.php-nak kellene JSON-t is visszaadnia a HTML mellett,
-// de ez bonyolítaná a fetch-et.
-// A legegyszerűbb, ha ezek a dropdown adatok statikusan vannak a rogzites.php-ban,
-// vagy egy külön API-ból töltődnek be JavaScripttel.
-// Jelenleg úgy hagyom, ahogy volt, de tudatában kell lenni, hogy a PHP ciklusok
-// csak akkor fognak működni, ha a változók definiálva vannak.
-// Mivel ezt a fájlt AJAX-szal töltjük be, a PHP változók értéke nem lesz elérhető.
-// EZÉRT EZEKET A PHP CIKLUSOKAT EL KELL TÁVOLÍTANI, ÉS A DROPDOWN OPCIÓKAT
-// JAVASCRIPTTEL KELL FELTÖLTENI, VAGY STATIKUSAN BELEÍRNI.
-// A legegyszerűbb megoldás most, hogy a PHP ciklusokat eltávolítom,
-// és feltételezem, hogy a dropdown-ok opciói statikusak, vagy JS-sel töltődnek.
-// Ha a dropdown-ok dinamikusak, akkor azokat is AJAX-szal kell lekérdezni a main.js-ben.
-
 // A biztonság kedvéért, ha mégis futna PHP-ként, definiáljuk a változókat üres tömbként
 $courts = [];
 $councils = [];
@@ -46,9 +28,6 @@ $persons = [];
                 <select class="form-select form-select-sm" id="court_name" name="court_name" required>
                     <option value="">Válasszon...</option>
                     <!-- Ezeket az opciókat JS-sel kell feltölteni, vagy statikusan beírni -->
-                    <!-- Példa statikus opciókra: -->
-                    <!-- <option value="Fővárosi Törvényszék">Fővárosi Törvényszék</option> -->
-                    <!-- <option value="Pesti Központi Kerületi Bíróság">Pesti Központi Kerületi Bíróság</option> -->
                 </select>
             </div>
             
@@ -80,9 +59,9 @@ $persons = [];
         <h3 class="card-title mb-3">Tárgyalási Jegyzék</h3>
         <div class="row g-2 align-items-center mb-3">
             <div class="col-md-2">
-                <label for="sorszam_display" class="form-label">Sorszám</label>
-                <input type="text" class="form-control form-control-sm" id="sorszam_display" value="1" disabled>
-                <input type="hidden" name="sorszam" id="sorszam_hidden" value="1">
+                <label for="sorszam" class="form-label">Sorszám</label>
+                <!-- A sorszam_display input most már szerkeszthető és a "sorszam" nevet kapja -->
+                <input type="text" class="form-control form-control-sm" id="sorszam" name="sorszam" value="1">
             </div>
             <div class="col-md-4">
                 <label for="ido" class="form-label">Idő</label>

@@ -155,8 +155,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Input/textarea mezők feltöltése
                     document.getElementById('date').value = jegyzokonyv.date || '';
-                    document.getElementById('sorszam_display').value = jegyzokonyv.sorszam || '';
-                    document.getElementById('sorszam_hidden').value = jegyzokonyv.sorszam || ''; // A rejtett sorszám is
+                    // Módosítva: sorszam_display és sorszam_hidden helyett most már csak 'sorszam'
+                    document.getElementById('sorszam').value = jegyzokonyv.sorszam || ''; 
                     document.getElementById('ido').value = jegyzokonyv.time ? jegyzokonyv.time.substring(0, 5) : ''; // Idő formázása hh:mm-re
                     document.getElementById('ugyszam').value = jegyzokonyv.ugyszam || '';
                     document.getElementById('letszam').value = jegyzokonyv.letszam || '';
@@ -282,6 +282,8 @@ document.addEventListener('DOMContentLoaded', function () {
     contentArea.addEventListener('click', function(e) {
         // Ellenőrizzük, hogy a kattintás egy "edit-button" osztályú elemen történt-e
         const closestButton = e.target.closest('.edit-button');
+        const exportButton = e.target.closest('#exportCsvBtn'); // Új: export gomb ellenőrzése
+
         if (closestButton) {
             e.preventDefault(); // Megakadályozzuk a link alapértelmezett viselkedését
             const id = closestButton.getAttribute('data-id');
@@ -290,6 +292,69 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 console.error('Hiányzó ID a szerkesztés gombhoz.');
             }
+        } else if (exportButton) { // Ha az export gombra kattintottunk
+            e.preventDefault(); // Megakadályozzuk az alapértelmezett viselkedést
+            exportToCsv(); // Meghívjuk az export függvényt
         }
     });
+
+    // Funkció az adatok CSV-be exportálásához
+    async function exportToCsv() {
+        try {
+            const response = await fetch('app/get_list_data.php'); // Lekérjük az adatokat az új API-ról
+            if (!response.ok) throw new Error('Hiba az adatok lekérdezésekor a CSV exportáláshoz.');
+            const result = await response.json();
+
+            if (result.success && Array.isArray(result.data)) {
+                const data = result.data;
+                if (data.length === 0) {
+                    showMessage('formMessage', 'Nincs exportálható adat.', 'info'); // Használjuk a showMessage-t
+                    return;
+                }
+
+                // CSV fejlécek (oszlopnevek)
+                const headers = Object.keys(data[0]);
+                const csvRows = [];
+                csvRows.push(headers.join(';')); // Fejlécek pontosvesszővel elválasztva
+
+                // Adatsorok hozzáadása
+                data.forEach(row => {
+                    const values = headers.map(header => {
+                        let value = row[header] ?? '';
+                        // Speciális karakterek kezelése CSV-ben (pl. vessző, idézőjel)
+                        value = String(value).replace(/"/g, '""'); // Idézőjelek duplázása
+                        if (value.includes(';') || value.includes('\n') || value.includes('"')) {
+                            value = `"${value}"`; // Ha speciális karakter van, tegyük idézőjelbe
+                        }
+                        return value;
+                    });
+                    csvRows.push(values.join(';'));
+                });
+
+                // CSV string összeállítása
+                const csvString = csvRows.join('\n');
+
+                // CSV fájl letöltése
+                const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                if (link.download !== undefined) { // Modern böngészők támogatása
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', 'jegyzokonyvek_' + new Date().toISOString().slice(0,10) + '.csv');
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else {
+                    showMessage('formMessage', 'A böngészője nem támogatja a fájlletöltést. Kérjük, másolja ki az adatokat manuálisan.', 'warning');
+                }
+                
+                showMessage('formMessage', 'Adatok sikeresen exportálva CSV-be!', 'success'); // Használjuk a showMessage-t
+            } else {
+                showMessage('formMessage', result.message || 'Hiba történt az adatok lekérdezésekor a CSV exportáláshoz.', 'danger');
+            }
+        } catch (error) {
+            showMessage('formMessage', `Hiba a CSV exportálás során: ${error.message}`, 'danger');
+        }
+    }
 });
