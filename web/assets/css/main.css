@@ -149,7 +149,9 @@ ul li {
     color: #495057;
     display: list-item; 
 }
-.form-control {
-    border-color:#8B2323;
-    background-color: rgba(255, 255, 255, 0.6);
+footer {
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 10px 0;
 }
+

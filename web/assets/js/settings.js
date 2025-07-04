@@ -39,10 +39,9 @@ function loadList(type) {
             list.innerHTML = '';
             data.forEach(item => {
                 const li = document.createElement('li');
-                // Hozzáadva: Bootstrap flexbox osztályok az igazításhoz
                 li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center'); 
                 
-                const textSpan = document.createElement('span'); // Hozzáadva: külön span a szövegnek
+                const textSpan = document.createElement('span'); // külön span a szövegnek
                 textSpan.textContent = item.value;
                 li.appendChild(textSpan); // A span hozzáadása a li-hez
 
@@ -62,10 +61,3 @@ function loadList(type) {
 function reloadAllLists() {
     ['birosag', 'tanacs', 'room', 'resztvevok'].forEach(type => loadList(type));
 };
-
-// console.log('Script betöltődött');
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     console.log('DOM kész, reloadAllLists hívás');
-//     reloadAllLists();
-// });
