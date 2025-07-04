@@ -11,7 +11,7 @@ body {
     min-height: 100vh;
     background-color: #f8f9fa; 
 }
-.btn-primary:hover {
+..btn-primary:hover {
     background-color: #8B2323 !important; 
     border-color:#333 !important; 
 }
@@ -31,8 +31,8 @@ body.no-flex {
     margin-bottom: 20px;
 }
 .logout-button{
-    background-color: #8B2323;
-    color:#faf8f8
+    background-color: #8B2323 !important;
+    color:#faf8f8 !important;
 }
 .logout-button:hover{
      background-color: #A52A2A;
@@ -185,3 +185,7 @@ footer {
     padding: 10px 0;
 }
 
+.sort-Order-Selec{
+    background-color: rgba(255, 255, 255, 0.9);
+     border: 2px solid  #A52A2A;
+}

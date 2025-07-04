@@ -71,7 +71,7 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
                 <input type="text" class="form-control" id="Search" placeholder="Keresés az ügyszám, bíróság és tanács alapján...">
             </div>
             <div class="col-md-3"> <!-- Rendezési opciók oszlopa -->
-                <select class="form-select form-select-sm" id="sortOrderSelect">
+                <select class="form-select form-select-sm sort-Order-Selec" id="sortOrderSelect">
                     <option value="date" <?= ($orderBy === 'date' ? 'selected' : '') ?>>Rendezés: Dátum szerint</option>
                     <option value="ugyszam" <?= ($orderBy === 'ugyszam' ? 'selected' : '') ?>>Rendezés: Ügyszám szerint</option>
                     <option value="room_number" <?= ($orderBy === 'room_number' ? 'selected' : '') ?>>Rendezés: Tárgyaló szerint</option>
