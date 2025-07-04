@@ -1,8 +1,8 @@
 function initSearch() { 
-    const searchInput = document.getElementById('jegyzokonyvSearch');
+    const searchInput = document.getElementById('Search');
     // ellenőrizzük, hogy az searchInput létezik-e, mielőtt használnánk
     if (!searchInput) {
-        console.warn("Keresőmező (jegyzokonyvSearch) nem található.");
+        console.warn("Keresőmező (Search) nem található.");
         return; 
     }
     const jegyzokonyvCards = document.querySelectorAll('.jegyzokonyv-card');

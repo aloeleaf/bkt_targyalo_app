@@ -85,15 +85,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Funkció a kereső inicializálására és a DOM átrendezésére
     function initSearch() {
         //console.log('initSearch: Kereső inicializálása.');
-        const searchInput = document.getElementById('jegyzokonyvSearch'); // Az ID megmarad a list.php-ból
-        const entryCardsContainer = document.getElementById('jegyzokonyvListContainer'); // A kártyák konténere
+        const searchInput = document.getElementById('Search'); // Az ID megmarad a list.php-ból
+        const entryCardsContainer = document.getElementById('ListContainer'); // A kártyák konténere
 
         if (!searchInput) {
-            console.warn('initSearch: A kereső input (#jegyzokonyvSearch) nem található.');
+            console.warn('initSearch: A kereső input (#Search) nem található.');
             return;
         }
         if (!entryCardsContainer) {
-            console.warn('initSearch: A bejegyzés kártyák konténere (#jegyzokonyvListContainer) nem található.');
+            console.warn('initSearch: A bejegyzés kártyák konténere (#ListContainer) nem található.');
             return;
         }
 

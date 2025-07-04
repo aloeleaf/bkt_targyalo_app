@@ -37,7 +37,7 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
 
         <div class="row mb-4 align-items-center"> <!-- Új sor a kereső és export gombnak -->
             <div class="col-md-9"> <!-- Keresőmező oszlopa -->
-                <input type="text" class="form-control" id="jegyzokonyvSearch" placeholder="Keresés az ügyszám, bíróság és tanács alapján...">
+                <input type="text" class="form-control" id="Search" placeholder="Keresés az ügyszám, bíróság és tanács alapján...">
             </div>
             <div class="col-md-3 text-end"> <!-- Export gomb oszlopa, jobbra igazítva -->
                 <button id="exportCsvBtn" class="btn btn-info btn-sm">
@@ -46,7 +46,7 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
             </div>
         </div>
 
-        <div id="jegyzokonyvListContainer">
+        <div id="ListContainer">
             <?php if (empty($filtered_entries)): ?>
                 <div class="alert alert-info" role="alert">
                     Nincs megjeleníthető bejegyzés az elmúlt 4 hétből.
