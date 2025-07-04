@@ -23,11 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bejelentkezés</title>
-    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/main.css" rel="stylesheet" />
+    <meta name="author" content="Martínez Luis Dávid & Papp Ágoston" />
 </head>
 <body>
     <div class="login-container">
@@ -48,5 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
     </div>
     <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

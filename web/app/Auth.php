@@ -82,13 +82,13 @@ class Auth {
             return true;
         }
 
-            return "Nincs jogosultságod a weboldalhoz.";
+            return "Nincs jogosultságod a weboldalhoz!";
         }
 
-            return "Nem található felhasználó az LDAP-ban.";
+            return "Felhasználó LDAP hiba.";
         }
 
-        return "Hibás felhasználónév vagy jelszó, vagy nem elérhető az LDAP.";
+        return "Hibás felhasználónév vagy jelszó, ill. nem elérhető LDAP!";
     }
 
     public static function isAuthenticated() {

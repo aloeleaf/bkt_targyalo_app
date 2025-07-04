@@ -36,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $response['success'] = true;
                 $response['data'] = $entry_data;
             } else {
-                $response['message'] = 'A megadott azonosítóval nem található bejegyzés.'; // Üzenet módosítva
+                $response['message'] = 'A megadott azonosítóval nem található bejegyzés.'; 
             }
         } catch (PDOException $e) {
             $response['message'] = 'Adatbázis hiba a lekérdezéskor: ' . $e->getMessage();
         }
     } else {
-        $response['message'] = 'Nincs megadva bejegyzés azonosító a lekérdezéshez.'; // Üzenet módosítva
+        $response['message'] = 'Nincs megadva bejegyzés azonosító a lekérdezéshez.'; 
     }
 } 
 // Adatok frissítése (POST kérés)
@@ -53,7 +53,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ellenőrizzük, hogy minden szükséges adat megérkezett-e
     if (isset($_POST['id']) && is_numeric($_POST['id'])) {
         $id = $_POST['id'];
-        // KULCSFONTOSSÁGÚ VÁLTOZTATÁS: $_POST kulcsok igazítása a rogzites.php name attribútumaihoz
+        // $_POST kulcsok igazítása a rogzites.php name attribútumaihoz
         $birosag = $_POST['court_name'] ?? ''; 
         $tanacs = $_POST['council_name'] ?? '';
         $date = $_POST['date'] ?? '';
@@ -106,9 +106,9 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->execute()) {
                 $response['success'] = true;
-                $response['message'] = 'A bejegyzés sikeresen frissítve!'; // Üzenet módosítva
+                $response['message'] = 'A bejegyzés sikeresen frissítve!'; 
             } else {
-                $response['message'] = 'Hiba történt a bejegyzés frissítésekor.'; // Üzenet módosítva
+                $response['message'] = 'Hiba történt a bejegyzés frissítésekor.';
             }
         } catch (PDOException $e) {
             $response['message'] = 'Adatbázis hiba a frissítéskor: ' . $e->getMessage();

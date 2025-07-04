@@ -18,8 +18,7 @@ $resztvevok = $_POST['resztvevok'] ?? '';
 $letszam = $_POST['letszam'] ?? '';
 $ugyminoseg = $_POST['ugyminoseg'] ?? '';
 $intezkedes = $_POST['intezkedes'] ?? '';
-$sorszam = $_POST['sorszam'] ?? ''; // Hozzáadva: sorszám lekérése a POST adatokból
-
+$sorszam = $_POST['sorszam'] ?? ''; 
 
 // Az ügyminőség és intézkedés összefűzése a subject mezőbe
 $subject = trim($ugyminoseg . "\n" . $intezkedes);
@@ -47,7 +46,7 @@ try {
         ':subject' => $subject,
         ':letszam' => $letszam,
         ':resztvevok' => $resztvevok,
-        ':sorszam' => $sorszam, // Hozzáadva: sorszám paraméter
+        ':sorszam' => $sorszam, 
     ]);
     
     echo json_encode(['success' => true, 'message' => 'Sikeres rögzítés']);

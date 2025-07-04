@@ -7,6 +7,7 @@
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="assets/css/settings.css" rel="stylesheet"> </head>
+    <meta name="author" content="Martínez Luis Dávid & Papp Ágoston" />
 <body>
 
 <div class="container mt-5">

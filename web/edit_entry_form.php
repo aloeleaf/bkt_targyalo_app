@@ -1,4 +1,3 @@
-<?php // edit_entry_form.php - FIGYELEM: Ez a fájl CSAK a HTML struktúrát tartalmazza, PHP logikát NEM! ?>
 <div class="container mt-5">
     <h1 class="mb-4 text-center mt-custom-top-margin">Jegyzőkönyv szerkesztése</h1>
 

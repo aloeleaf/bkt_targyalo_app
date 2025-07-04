@@ -1,6 +1,6 @@
-function initSearch() { // Mostantól ez egy sima függvény lesz
+function initSearch() { 
     const searchInput = document.getElementById('jegyzokonyvSearch');
-    // Fontos: ellenőrizzük, hogy az searchInput létezik-e, mielőtt használnánk
+    // ellenőrizzük, hogy az searchInput létezik-e, mielőtt használnánk
     if (!searchInput) {
         console.warn("Keresőmező (jegyzokonyvSearch) nem található.");
         return; 
