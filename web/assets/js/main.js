@@ -84,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funkció a kereső inicializálására és a DOM átrendezésére
     function initSearch() {
-        //console.log('initSearch: Kereső inicializálása.');
         const searchInput = document.getElementById('Search'); // Az ID megmarad a list.php-ból
         const entryCardsContainer = document.getElementById('ListContainer'); // A kártyák konténere
 
@@ -100,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Eseményfigyelő a keresőmező bemenetére
         searchInput.addEventListener('input', function() {
             const searchTerm = searchInput.value.toLowerCase();
-            //console.log('initSearch: Keresési kifejezés:', searchTerm);
 
             // KULCSFONTOSSÁGÚ VÁLTOZTATÁS: A szülő oszlop div-eket gyűjtjük be
             const allEntryColumns = Array.from(entryCardsContainer.querySelectorAll('.col-12.col-md-6.mb-4'));
@@ -140,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             entryCardsContainer.appendChild(fragment);
 
-            //console.log('initSearch: Keresés és DOM átrendezés befejezve.');
         });
     }
 
@@ -172,8 +169,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Ez biztosítja, hogy a böngésző ne a gyorsítótárból szolgálja ki a kérést
         url += (url.includes('?') ? '&' : '?') + `_t=${new Date().getTime()}`;
         
-        console.log('loadPage: Betöltendő URL:', url); // Debugging
-
         fetch(url)
             .then(response => {
                 if (!response.ok) throw new Error('Hiba a betöltés során');
