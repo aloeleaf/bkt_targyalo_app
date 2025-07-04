@@ -62,37 +62,37 @@ $filtered_entries = array_map(function ($row) { // Változó neve módosítva
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Bíróság:</strong> <?= htmlspecialchars($data['court_name'] ?? 'N/A'); ?></div>
+                                        <div class="col-12 mb-2"><strong title="A tárgyalás helyszínéül szolgáló bíróság neve.">Bíróság:</strong> <?= htmlspecialchars($data['court_name'] ?? 'N/A'); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Tanács:</strong> <?= htmlspecialchars($data['council_name'] ?? 'N/A'); ?></div>
+                                        <div class="col-12 mb-2"><strong title="A tárgyalást vezető bíró.">Tanács:</strong> <?= htmlspecialchars($data['council_name'] ?? 'N/A'); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Dátum:</strong> <?= htmlspecialchars($data['session_date'] ?? 'N/A'); ?></div>
+                                        <div class="col-12 mb-2"><strong title="A tárgyalás dátuma.">Dátum:</strong> <?= htmlspecialchars($data['session_date'] ?? 'N/A'); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Tárgyaló:</strong> <?= htmlspecialchars($data['room_number'] ?? 'N/A'); ?></div>
+                                        <div class="col-12 mb-2"><strong title="A tárgyalás helyszínéül szolgáló tárgyalóterem száma vagy neve.">Tárgyaló:</strong> <?= htmlspecialchars($data['room_number'] ?? 'N/A'); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Sorszám:</strong> <?= htmlspecialchars($data['sorszam'] ?? 'N/A'); ?></div>
+                                        <div class="col-12 mb-2"><strong title="A tárgyalás sorszáma az adott napon.">Sorszám:</strong> <?= htmlspecialchars($data['sorszam'] ?? 'N/A'); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Idő:</strong> <?= htmlspecialchars($data['ido'] ?? 'N/A'); ?></div>
+                                        <div class="col-12 mb-2"><strong title="A tárgyalás kezdési időpontja.">Idő:</strong> <?= htmlspecialchars($data['ido'] ?? 'N/A'); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Ügyszám:</strong> <?= htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?></div>
+                                        <div class="col-12 mb-2"><strong title="A tárgyalás ügyazonosító száma.">Ügyszám:</strong> <?= htmlspecialchars($data['ugyszam'] ?? 'N/A'); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Résztvevők:</strong> <?= nl2br(htmlspecialchars($data['persons'] ?? 'N/A')); ?></div>
+                                        <div class="col-12 mb-2"><strong title="A tárgyalásban résztvevő felek minősége.">Résztvevők:</strong> <?= nl2br(htmlspecialchars($data['persons'] ?? 'N/A')); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Id.:</strong> <?= htmlspecialchars($data['azon'] ?? 'N/A'); ?></div>
+                                        <div class="col-12 mb-2"><strong title="Az idézettek szám.">Id.:</strong> <?= htmlspecialchars($data['azon'] ?? 'N/A'); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Ügyminőség:</strong> <?= nl2br(htmlspecialchars($data['ugyminoseg'] ?? 'N/A')); ?></div>
+                                        <div class="col-12 mb-2"><strong title="Az ügy minősítése vagy típusa.">Ügyminőség:</strong> <?= nl2br(htmlspecialchars($data['ugyminoseg'] ?? 'N/A')); ?></div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 mb-2"><strong>Intézkedés:</strong> <?= nl2br(htmlspecialchars($data['intezkedes'] ?? 'N/A')); ?></div>
+                                        <div class="col-12 mb-2"><strong title="Az ügyben hozott intézkedés vagy döntés.">Intézkedés:</strong> <?= nl2br(htmlspecialchars($data['intezkedes'] ?? 'N/A')); ?></div>
                                     </div>
                                 </div>
                                 <div class="card-footer text-center">

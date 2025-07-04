@@ -28,9 +28,9 @@
 
         <div class="col-12 col-md-6 mb-4">
             <div class="category-section h-100">
-                <h2>Tanács hozzáadása</h2>
+                <h2>Tanács (bíró) hozzáadása</h2>
                 <div class="input-group mb-3">
-                    <input type="text" id="tanacsInput" class="form-control" placeholder="Új tanács neve" aria-label="Új tanács neve">
+                    <input type="text" id="tanacsInput" class="form-control" placeholder="Új tanács (bíró) neve" aria-label="Új tanács (bíró) neve">
                     <div class="input-group-append">
                         <button class="btn btn-primary" type="button" onclick="addItem('tanacs')">Hozzáad <i class="fas fa-plus"></i></button>
                     </div>
