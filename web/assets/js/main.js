@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             // Lekérjük a kiválasztott rendezési szempontot
             const sortBy = document.getElementById('sortOrderSelect')?.value || 'date'; // Alapértelmezett: dátum
-            const response = await fetch(`app/get_list_data.php?orderBy=${sortBy}`); // Elküldjük a rendezési paramétert
+            const response = await fetch(`app/get_list_data.php?orderBy=room_number`);
             if (!response.ok) throw new Error('Hiba az adatok lekérdezésekor a CSV exportáláshoz.');
             const result = await response.json();
 
