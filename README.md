@@ -1,4 +1,4 @@
-# Tárgyaló foglalás alkalmazás.
+# Tárgyaló naptár alkalmazás.
 
 ## Környezet beállítása
 A környezet beállításához ami egy docker konténer virtualizációs környezet, a következő lépéseket kell megtenni.
