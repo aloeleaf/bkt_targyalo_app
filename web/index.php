@@ -1,36 +1,8 @@
 <?php
-
-require_once __DIR__ . '/app/Auth.php';
-$config = require_once __DIR__ . '/config/config.php';
-
-$auth = new Auth($config);
-$error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $result = $auth->login($username, $password);
-
-    if ($result === true) {
-        header("Location: dashboard.php");
-        exit;
-    } else {
-        $error = $result;
-    }
-}
+$page_title = 'Bejelentkezés'; // <-- set this before including header
+require_once __DIR__ . '/includes/header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bejelentkezés</title>
-    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="assets/css/main.css" rel="stylesheet" />
-    <meta name="author" content="Martínez Luis Dávid & Papp Ágoston" />
-</head>
-<body>
     <div class="login-container">
     <h2 class="text-center mb-4">Bejelentkezés</h2>
     <?php if (!empty($error)): ?>
@@ -48,7 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" class="btn w-100 btn-brown">Belépés</button>
     </form>
     </div>
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <title><?= htmlspecialchars($page_title) ?></title>
+    <script src="<?= $base_url ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-</body>
-</html>
+
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

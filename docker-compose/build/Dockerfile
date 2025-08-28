@@ -1,5 +1,22 @@
 FROM php:8.2-fpm
 
+# Set proxy environment variables (if needed)
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG NO_PROXY
+
+ENV http_proxy=${HTTP_PROXY}
+ENV https_proxy=${HTTPS_PROXY}
+ENV no_proxy=${NO_PROXY}
+
+# Install system utilities
+RUN apt-get update && apt-get install -y \
+    procps \
+    iproute2 \
+    net-tools \
+    # ...other packages...
+    && rm -rf /var/lib/apt/lists/*
+
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     libldap2-dev \
